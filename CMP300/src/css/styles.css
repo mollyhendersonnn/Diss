@@ -1,0 +1,175 @@
+@charset "UTF-8";
+/* CSS Document FOR STYLING THE CALENDAR */
+/* styles.css */
+
+/* PURPLE THEME COLORS */
+:root {
+    --light-purple: #E6E6FA;
+    --button-purple: #A800FF;
+    --dark-purple: #5A005A;
+    --light-blue: #ADD8E6;
+    --white: #FFFFFF;
+    --black: #000000;
+}
+
+body {
+  display: grid;
+  grid-template-rows: auto 1fr; /* Navbar row and content row */
+  grid-template-columns: 1fr; /* Single column layout */
+  min-height: 100vh; /* Full viewport height */
+  margin: 15px;
+  background-color: var(--light-purple);
+}
+
+/* Navigation Container Styles */
+.navigation {
+  background-color: #4B0082; /* Dark purple background */
+  padding: 10px; /* Padding inside the navbar */
+  width: 100; /* Ensures it spans the full width */
+  box-sizing: border-box; /* Includes padding and border in width */
+}
+
+/* List Container Styles */
+.navigation ul {
+  list-style: none; /* Removes default bullet points */
+  margin: 0; /* Removes default margin */
+  padding: 0; /* Removes default padding */
+  display: flex; /* Aligns items in a row */
+  justify-content: space-around; /* Even spacing between items */
+  align-items: center; /* Aligns items vertically */
+}
+
+/* List Item Styles */
+.navigation li {
+  margin: 0; /* Removes default margin */
+  padding: 0; /* Removes default padding */
+}
+
+/* Navigation Links */
+.navigation a {
+  text-decoration: none; /* Removes underline */
+  color: white; /* White text color */
+  font-size: 16px; /* Font size */
+  padding: 10px 20px; /* Padding around links */
+  transition: color 0.3s, background-color 0.3s; /* Smooth hover effect */
+}
+
+/* Hover Effect for Links */
+.navigation a:hover {
+  color: #ADD8E6; /* Light blue text */
+  background-color: #A800FF; /* Button purple background */
+  border-radius: 5px; /* Rounded edges on hover */
+}
+
+/* Content area */
+.main-content {
+  grid-row: 2; /* Assigns content to the second row */
+  grid-column: 1; /* Spans the entire column */
+  padding: 20px;
+}
+
+
+
+.today {
+    background-color: var(--light-blue);
+}
+
+table {
+    width: 100%;
+    border: 1px solid var(--black);
+    border-collapse: collapse;
+    margin-bottom: 10px;
+    box-shadow: 10px 10px 10px #666262;
+}
+
+th {
+    border: 1px solid var(--black);
+    padding: 6px;
+    font-weight: bold;
+    background: var(--light-blue);
+}
+
+td {
+    border: 1px solid var(--black);
+    padding: 6px;
+    vertical-align: top;
+    width: 100px;
+    height: 100px;
+}
+
+.daysOfTheWeek {
+    background: var(--button-purple);
+    color: var(--white);
+    text-align: center;
+    font-size: 16pt;
+    height: 30px;
+}
+
+a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color: var(--button-purple);
+}
+
+a:active {
+    text-decoration: none;
+    cursor: pointer;
+    color: var(--black);
+}
+
+.centerHeading {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.monthSelect,
+.yearSelect {
+    cursor: pointer;
+    border: 2px solid var(--black);
+    padding: 10px;
+    width: 120px;
+    font-size: 12pt;
+    border-radius: 5px;
+    margin: 0;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    background-color: var(--button-purple);
+    color: var(--white);
+    margin-right: 15px;
+} 
+
+.displayBtn {
+    background-color: var(--button-purple);
+    border: 2px solid var(--black);
+    color: var(--white);
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+
+/* Add media queries for fixed navbar styling across devices */
+@media screen and (max-width: 768px) {
+    .navbar {
+        font-size: 14px;
+    }
+
+    .monthSelect,
+    .yearSelect {
+        width: 100px;
+        font-size: 10pt;
+    }
+}
+
+/* Responsive button scaling */
+@media screen and (max-width: 480px) {
+    .displayBtn {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
