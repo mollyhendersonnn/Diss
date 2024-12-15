@@ -12,54 +12,67 @@
     --black: #000000;
 }
 
-body {
-  display: grid;
-  grid-template-rows: auto 1fr; /* Navbar row and content row */
-  grid-template-columns: 1fr; /* Single column layout */
-  min-height: 100vh; /* Full viewport height */
-  margin: 15px;
-  background-color: var(--light-purple);
+*{
+    margin: 15px;;
+    padding: 15px;
 }
 
-/* Navigation Container Styles */
+body{
+    min-height: 100vh;
+    background-image: url(Images/bg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .navigation {
-  background-color: #4B0082; /* Dark purple background */
-  padding: 10px; /* Padding inside the navbar */
-  width: 100; /* Ensures it spans the full width */
-  box-sizing: border-box; /* Includes padding and border in width */
+    background-color: var(--dark-purple); /* Purple background */
+    border-radius: 15px; /* Rounded edges */
+    padding: 15px; /* Padding on top, left, and right */
+    margin: 15px; /* Add a margin around the navbar */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* List Container Styles */
 .navigation ul {
-  list-style: none; /* Removes default bullet points */
-  margin: 0; /* Removes default margin */
-  padding: 0; /* Removes default padding */
-  display: flex; /* Aligns items in a row */
-  justify-content: space-around; /* Even spacing between items */
-  align-items: center; /* Aligns items vertically */
+    list-style: none;
+    display: flex;
+    justify-content: space-between; /* Distribute links evenly */
+    align-items: center;
+    padding: 0;
+    margin: 0;
 }
 
-/* List Item Styles */
 .navigation li {
-  margin: 0; /* Removes default margin */
-  padding: 0; /* Removes default padding */
+    flex: 1; /* Make links stretch evenly */
+    text-align: center; /* Center text inside each link */
 }
 
-/* Navigation Links */
 .navigation a {
-  text-decoration: none; /* Removes underline */
-  color: white; /* White text color */
-  font-size: 16px; /* Font size */
-  padding: 10px 20px; /* Padding around links */
-  transition: color 0.3s, background-color 0.3s; /* Smooth hover effect */
+    text-decoration: none;
+    color: var(--white); /* White text */
+    font-size: 16px;
+    display: block;
+    padding: 10px 0; /* Vertical padding for clickability */
+    transition: background-color 0.3s;
+    border-radius: 10px; /* Rounded edges for links */
 }
 
-/* Hover Effect for Links */
 .navigation a:hover {
-  color: #ADD8E6; /* Light blue text */
-  background-color: #A800FF; /* Button purple background */
-  border-radius: 5px; /* Rounded edges on hover */
+    background-color: var(--button-purple); /* Slightly brighter purple on hover */
 }
+
+/* Make navbar responsive */
+@media screen and (max-width: 768px) {
+    .navigation ul {
+        flex-direction: column; /* Stack links vertically */
+    }
+
+    .navigation li {
+        margin-bottom: 10px; /* Space between links */
+    }
+}
+
 
 /* Content area */
 .main-content {
@@ -151,25 +164,31 @@ a:active {
     cursor: pointer;
 }
 
-
-
-/* Add media queries for fixed navbar styling across devices */
-@media screen and (max-width: 768px) {
-    .navbar {
-        font-size: 14px;
-    }
-
-    .monthSelect,
-    .yearSelect {
-        width: 100px;
-        font-size: 10pt;
-    }
+.table-container {
+    padding: 20px;
+    overflow-x: auto;
 }
 
-/* Responsive button scaling */
-@media screen and (max-width: 480px) {
-    .displayBtn {
-        font-size: 14px;
-        padding: 8px;
-    }
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
+
+.data-table th,
+.data-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.data-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.data-table tr:hover {
+    background-color: #f5f5f5;
+}
+
