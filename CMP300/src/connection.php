@@ -2,7 +2,7 @@
 //Define credentials for connecting to the server
 define('DB_SERVER', '213.171.200.34');
 define('DB_USERNAME', 'mhenderson');
-define('DB_PASSWORD', 'Password20*');
+define('DB_PASSWORD', 'GingerBreadMan20');
 define('DB_NAME', 'mhenderson');
 
 //Connect to the SQL
