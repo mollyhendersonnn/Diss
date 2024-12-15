@@ -1,7 +1,13 @@
+
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// Start the session
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Include database connection
+include_once("connection.php");
+include_once("navigation.php");
 
 date_default_timezone_set('Europe/London'); // Set your timezone
 
@@ -36,12 +42,6 @@ $totalDays = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 </head>
 <body>
     
-<?php
-// includes
-include("connection.php");
-include("navigation.php");
-?>
-
 <h1>Calendar Booking</h1>  
 
 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">

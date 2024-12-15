@@ -1,7 +1,12 @@
 <?php
-// includes
-include("connection.php");
-include("navigation.php");
+// Start the session
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Include database connection
+include_once("connection.php");
+include_once("navigation.php");
 ?>
 
 
