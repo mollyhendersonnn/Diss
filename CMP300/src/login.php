@@ -7,6 +7,7 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include database connection
 include_once("connection.php");
 include_once("navigation.php");
+//include_once("audit.php");
 
 // Log errors for debugging (update path as needed)
 $logFile = __DIR__ . '/debug_log.txt';
@@ -39,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Process login if no validation errors
     if (empty($enterpriseID_err) && empty($password_err)) {
-        $query = "SELECT userID, enterpriseID, password, roleID FROM tbl_users WHERE enterpriseID = ?";
+        $query = "SELECT userID, enterpriseID, password, roleID, groupID FROM tbl_users WHERE enterpriseID = ?";
         
         if ($stmt = mysqli_prepare($link, $query)) {
             // Bind input parameters
@@ -52,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Check if enterprise ID exists
                 if (mysqli_stmt_num_rows($stmt) == 1) {
                     // Fetch the result
-                    mysqli_stmt_bind_result($stmt, $id, $fetchedEnterpriseID, $hashed_password, $roleID);
+                    mysqli_stmt_bind_result($stmt, $id, $fetchedEnterpriseID, $hashed_password, $roleID, $groupID);
                     if (mysqli_stmt_fetch($stmt)) {
                         // Verify password
                         if (password_verify($password, $hashed_password)) {
@@ -61,9 +62,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION['userID'] = $id;
                             $_SESSION['enterpriseID'] = $fetchedEnterpriseID;
                             $_SESSION['roleID'] = $roleID;
+                            $_SESSION['groupID'] = $groupID;
 
                             //Audit log
-                            auditAction($userID, "User logged in: $userID");
+                           // auditAction($userID, "User logged in: $userID");
 
                             // Redirect to the dashboard
                             header("Location: dashboard.php");
@@ -102,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
 
 </head>

@@ -7,6 +7,7 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include database connection
 include_once("connection.php");
 include_once("navigation.php");
+//include_once("audit.php");
 ?>
 
 
@@ -43,12 +44,13 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ) {
             mysqli_stmt_bind_param($stmt, "i", $_SESSION["groupID"]);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
+            echo '<a href="createEvent.php" class="btn btn-primary mb-3">Create Event</a>';
         } else {
             die("Database query preparation failed: " . mysqli_error($link));
         }
     }
     else{
-        echo '<button class="btn btn-primary mb-3" data-toggle="modal" data-target="#createEventModal">Create Event</button>';
+        echo '<a href="createEvent.php" class="btn btn-primary mb-3">Create Event</a>';
     }
 } else {
     // Default query for users without a group
@@ -98,97 +100,4 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ) {
                 ?>
             </tbody>
         </table>
-    </div>
-    <div class="modal" id="createEventModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Create Event</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="createEventForm" enctype="multipart/form-data">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="eventTitle">Event Title</label>
-                        <input type="text" class="form-control" id="eventTitle" name="eventTitle" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="eventFile">Upload Image</label>
-                        <input type="file" class="form-control" id="eventFile" name="eventFile" accept="image/*">
-                    </div>
-                    <div class="form-group">
-                        <label for="eventType">Event Type</label>
-                        <select class="form-control" id="eventType" name="eventType" required>
-                            <option value="holiday">Holiday</option>
-                            <option value="celebration">Celebration</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="eventDescription">Description</label>
-                        <textarea class="form-control" id="eventDescription" name="eventDescription" rows="3" required></textarea>
-                    </div>
-                                        <div class="form-group">
-                        <label for="startDateTime">Start Date and Time</label>
-                        <input type="datetime-local" class="form-control" id="startDateTime" name="startDateTime" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="endDateTime">End Date and Time</label>
-                        <input type="datetime-local" class="form-control" id="endDateTime" name="endDateTime" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Create</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-</div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-
-</html>
-
-<script>
-    $(document).ready(function() {
-        $('#createEventForm').on('submit', function(e) {
-            e.preventDefault(); // Prevent default form submission
-
-            // Gather form data
-            var formData = new FormData(this);
-
-            $.ajax({
-    url: 'createEvent.php',
-    method: 'POST',
-    data: formData,
-    processData: false, // Don't process the data as a string
-    contentType: false, // Don't set content type for multipart form data
-    dataType: 'json',
-    success: function(response) {
-        if (response.success) {
-            $('#createEventModal').modal('hide');
-            $('#createEventForm')[0].reset();
-            alert('Event created successfully!');
-            location.reload();
-        } else {
-            alert('Error: ' + response.message);
-        }
-    },
-    error: function(xhr, status, error) {
-        console.error('Status:', status);
-        console.error('Error:', error);
-        console.error('Response:', xhr.responseText);
-        alert('An unexpected error occurred: ' + error + '\nStatus: ' + status + '\nResponse: ' + xhr.responseText);
-    }
-});
-
-            });
-        });
-    
-</script>
+   
