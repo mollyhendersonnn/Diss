@@ -62,6 +62,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION['enterpriseID'] = $fetchedEnterpriseID;
                             $_SESSION['roleID'] = $roleID;
 
+                            //Audit log
+                            auditAction($userID, "User logged in: $userID");
+
                             // Redirect to the dashboard
                             header("Location: dashboard.php");
                             exit();
