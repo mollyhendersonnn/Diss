@@ -39,7 +39,7 @@ include_once("navigation.php");
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ) {
     // Check if groupID is not null
     if (!empty($_SESSION["groupID"])) {
-        $query = "SELECT * FROM tbl_events WHERE groupID = ? AND stateID = 1";
+        $query = "SELECT eventTitle, eventType, eventDescription, eventStart FROM tbl_events WHERE groupID = ? AND stateID = 1";
         if ($stmt = mysqli_prepare($link, $query)) {
             mysqli_stmt_bind_param($stmt, "i", $_SESSION["groupID"]);
             mysqli_stmt_execute($stmt);
@@ -48,13 +48,10 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ) {
         } else {
             die("Database query preparation failed: " . mysqli_error($link));
         }
-    }
-    else{
-        echo '<a href="createEvent.php" class="btn btn-primary mb-3">Create Event</a>';
-    }
+
 } else {
     // Default query for users without a group
-    $query = "SELECT * FROM tbl_events WHERE stateID = 1";
+    $query = "SELECT eventTitle, eventType, eventDescription, eventStart FROM tbl_events WHERE stateID = 1";
     $result = mysqli_query($link, $query);
     if ($result === false) {
         die("Database query failed: " . mysqli_error($link));
@@ -65,39 +62,44 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ) {
 <div class="container mt-5">
         <h2 class="mb-4">Events</h2>
        <table class="table table-bordered table-striped">
-            <thead class="thead-dark">
-                <tr>
-                    <?php
-                    // Fetch the first row to get column names dynamically
-                    if ($result && mysqli_num_rows($result) > 0) {
-                        $first_row = mysqli_fetch_assoc($result);
+    <thead class="thead-dark">
+        <tr>
+            <?php
+            // Fetch the first row to get column names dynamically
+            if ($result && mysqli_num_rows($result) > 0) {
+                $first_row = mysqli_fetch_assoc($result);
 
-                        // Display column names
-                        foreach ($first_row as $column_name => $value) {
-                            echo "<th>" . htmlspecialchars($column_name) . "</th>";
-                        }
-                        echo "</tr>";
-                        // Reset the result pointer
-                        mysqli_data_seek($result, 0);
-                    }
-                    ?>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                // Loop through each row of the query result
-                if ($result && mysqli_num_rows($result) > 0) {
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<tr>";
-                        foreach ($row as $value) {
-                            echo "<td>" . htmlspecialchars($value) . "</td>";
-                        }
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='100%'>No results found.</td></tr>";
+                // Display column names
+                foreach ($first_row as $column_name => $value) {
+                    echo "<th>" . htmlspecialchars($column_name) . "</th>";
                 }
-                ?>
-            </tbody>
-        </table>
+                echo "</tr>";
+                // Reset the result pointer
+                mysqli_data_seek($result, 0);
+            }
+            ?>
+        </tr>
+        </thead>
+<tbody>
+    <?php
+    // Loop through each row of the query result
+    if ($result && mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo "<tr>";
+            // Add clickable link to the event title only
+            echo "<td><a href='eventDetails.php?eventID=" . $row['eventID'] . "'>" . htmlspecialchars($row['eventTitle']) . "</a></td>";
+            foreach ($row as $column_name => $value) {
+                if ($column_name != 'eventID' && $column_name != 'eventTitle') {
+                    echo "<td>" . htmlspecialchars($value) . "</td>";
+                }
+            }
+            echo "</tr>";
+        }
+    } else {
+        echo "<tr><td colspan='100%'>No results found.</td></tr>";
+    }
+    ?>
+</tbody>
+</table>
+
    

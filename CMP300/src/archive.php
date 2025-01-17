@@ -26,7 +26,7 @@ include_once("navigation.php");
 
 </head>
 
-
+//ToDo might be useful for a delete archived event button
 </head>
 
 <body>
