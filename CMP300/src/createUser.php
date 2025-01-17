@@ -6,6 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include database configuration
 include("connection.php");
 include("navigation.php");
+//include("audit.php");
 
 // Define variables and initialize with empty values
 $username = $password = $firstname = $roleID = $groupID = "";
@@ -51,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         if (mysqli_stmt_execute($stmt_insert)) {
                             echo "<div class='alert alert-success'>User created successfully!</div>";
                             //Audit log
-                            auditAction($userID, "User created user: $username");
+                           // auditAction($userID, "User created user: $username");
                         } else {
                             echo "<div class='alert alert-danger'>Error: " . mysqli_stmt_error($stmt_insert) . "</div>";
                         }
