@@ -36,23 +36,9 @@ include_once("navigation.php");
 
 // Check if the user is logged in and session variables exist
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ) {
-    // Check if groupID is not null
-    if (!empty($_SESSION["groupID"])) {
-        $query = "SELECT * FROM tbl_events WHERE groupID = ? AND stateID = 1";
-        if ($stmt = mysqli_prepare($link, $query)) {
-            mysqli_stmt_bind_param($stmt, "i", $_SESSION["groupID"]);
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-        } else {
-            die("Database query preparation failed: " . mysqli_error($link));
-        }
-    }
-    else{
-        echo '<button class="btn btn-primary mb-3" data-toggle="modal" data-target="#createEventModal">Create Event</button>';
-    }
-} else {
+
     // Default query for users without a group
-    $query = "SELECT * FROM tbl_events WHERE stateID = 1";
+    $query = "SELECT * FROM tbl_events WHERE stateID = 2";
     $result = mysqli_query($link, $query);
     if ($result === false) {
         die("Database query failed: " . mysqli_error($link));
@@ -61,7 +47,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ) {
         ?>
 
 <div class="container mt-5">
-        <h2 class="mb-4">Events</h2>
+        <h2 class="mb-4">Archived events</h2>
        <table class="table table-bordered table-striped">
             <thead class="thead-dark">
                 <tr>
@@ -163,32 +149,31 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ) {
             // Gather form data
             var formData = new FormData(this);
 
+            // Send AJAX request to the server
             $.ajax({
-    url: 'createEvent.php',
-    method: 'POST',
-    data: formData,
-    processData: false, // Don't process the data as a string
-    contentType: false, // Don't set content type for multipart form data
-    dataType: 'json',
-    success: function(response) {
-        if (response.success) {
-            $('#createEventModal').modal('hide');
-            $('#createEventForm')[0].reset();
-            alert('Event created successfully!');
-            location.reload();
-        } else {
-            alert('Error: ' + response.message);
-        }
-    },
-    error: function(xhr, status, error) {
-        console.error('Status:', status);
-        console.error('Error:', error);
-        console.error('Response:', xhr.responseText);
-        alert('An unexpected error occurred: ' + error + '\nStatus: ' + status + '\nResponse: ' + xhr.responseText);
-    }
-});
-
+                url: 'createEvent.php', // Server-side script to handle event creation
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false, // Ensure file upload is handled correctly
+                dataType: 'json', // Expect JSON response
+                success: function(response) {
+                    if (response.sql) {
+                        // Display the SQL query for debugging
+                        alert('SQL Query: ' + response.sql);
+                    } else if (response.success) {
+                        $('#createEventModal').modal('hide');
+                        $('#createEventForm')[0].reset();
+                        alert('Event created successfully!');
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('An unexpected error occurred: ' + error);
+                }
             });
         });
-    
+    });
 </script>

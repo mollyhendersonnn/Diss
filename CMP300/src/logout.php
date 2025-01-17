@@ -2,6 +2,9 @@
 //Initialise the session
 session_start();
 
+//Audit log
+auditAction($userID, "User logged out: $userID");
+
 //unset session variables
 $_SESSION = array();
 

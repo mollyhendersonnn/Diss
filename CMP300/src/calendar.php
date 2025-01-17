@@ -42,6 +42,40 @@ $totalDays = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 </head>
 <body>
     
+<?php
+
+    
+
+// Check if the user is logged in and session variables exist
+if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ) {
+    // Check if groupID is not null
+    if (!empty($_SESSION["groupID"])) {
+        $query = "SELECT * FROM tbl_events WHERE groupID = ?";
+        if ($stmt = mysqli_prepare($link, $query)) {
+            mysqli_stmt_bind_param($stmt, "i", $_SESSION["groupID"]);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+        } else {
+            die("Database query preparation failed: " . mysqli_error($link));
+        }
+    }
+    else{
+        echo '<button class="btn btn-primary mb-3" data-toggle="modal" data-target="#createEventModal">Create Event</button>';
+    }
+} else {
+    // Default query for users without a group
+    $query = "SELECT * FROM tbl_events";
+    $result = mysqli_query($link, $query);
+    if ($result === false) {
+        die("Database query failed: " . mysqli_error($link));
+    }
+}
+        ?>
+
+
+
+
+
 <h1>Calendar Booking</h1>  
 
 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
@@ -111,3 +145,5 @@ echo "</tr></table>";
 
 </body>
 </html>
+
++
