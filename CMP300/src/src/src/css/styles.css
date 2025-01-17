@@ -1,0 +1,194 @@
+@charset "UTF-8";
+/* CSS Document FOR STYLING THE CALENDAR */
+/* styles.css */
+
+/* PURPLE THEME COLORS */
+:root {
+    --light-purple: #E6E6FA;
+    --button-purple: #A800FF;
+    --dark-purple: #5A005A;
+    --light-blue: #ADD8E6;
+    --white: #FFFFFF;
+    --black: #000000;
+}
+
+*{
+    margin: 15px;;
+    padding: 15px;
+}
+
+body{
+    min-height: 100vh;
+    background-image: url(Images/bg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navigation {
+    background-color: var(--dark-purple); /* Purple background */
+    border-radius: 15px; /* Rounded edges */
+    padding: 15px; /* Padding on top, left, and right */
+    margin: 15px; /* Add a margin around the navbar */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.navigation ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-between; /* Distribute links evenly */
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+.navigation li {
+    flex: 1; /* Make links stretch evenly */
+    text-align: center; /* Center text inside each link */
+}
+
+.navigation a {
+    text-decoration: none;
+    color: var(--white); /* White text */
+    font-size: 16px;
+    display: block;
+    padding: 10px 0; /* Vertical padding for clickability */
+    transition: background-color 0.3s;
+    border-radius: 10px; /* Rounded edges for links */
+}
+
+.navigation a:hover {
+    background-color: var(--button-purple); /* Slightly brighter purple on hover */
+}
+
+/* Make navbar responsive */
+@media screen and (max-width: 768px) {
+    .navigation ul {
+        flex-direction: column; /* Stack links vertically */
+    }
+
+    .navigation li {
+        margin-bottom: 10px; /* Space between links */
+    }
+}
+
+
+/* Content area */
+.main-content {
+  grid-row: 2; /* Assigns content to the second row */
+  grid-column: 1; /* Spans the entire column */
+  padding: 20px;
+}
+
+
+
+.today {
+    background-color: var(--light-blue);
+}
+
+table {
+    width: 100%;
+    border: 1px solid var(--black);
+    border-collapse: collapse;
+    margin-bottom: 10px;
+    box-shadow: 10px 10px 10px #666262;
+}
+
+th {
+    border: 1px solid var(--black);
+    padding: 6px;
+    font-weight: bold;
+    background: var(--light-blue);
+}
+
+td {
+    border: 1px solid var(--black);
+    padding: 6px;
+    vertical-align: top;
+    width: 100px;
+    height: 100px;
+}
+
+.daysOfTheWeek {
+    background: var(--button-purple);
+    color: var(--white);
+    text-align: center;
+    font-size: 16pt;
+    height: 30px;
+}
+
+a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color: var(--button-purple);
+}
+
+a:active {
+    text-decoration: none;
+    cursor: pointer;
+    color: var(--black);
+}
+
+.centerHeading {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.monthSelect,
+.yearSelect {
+    cursor: pointer;
+    border: 2px solid var(--black);
+    padding: 10px;
+    width: 120px;
+    font-size: 12pt;
+    border-radius: 5px;
+    margin: 0;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    background-color: var(--button-purple);
+    color: var(--white);
+    margin-right: 15px;
+} 
+
+.displayBtn {
+    background-color: var(--button-purple);
+    border: 2px solid var(--black);
+    color: var(--white);
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.table-container {
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.data-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.data-table tr:hover {
+    background-color: #f5f5f5;
+}
+
