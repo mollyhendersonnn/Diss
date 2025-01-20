@@ -8,142 +8,218 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include database connection
 include_once("connection.php");
 include_once("navigation.php");
-
-date_default_timezone_set('Europe/London'); // Set your timezone
-
-define("ADAY", (60*60*24));
-
-if ((!isset($_POST['month'])) || (!isset($_POST['year']))) {
-    $nowArray = getdate();
-    $month = $nowArray['mon'];
-    $year = $nowArray['year'];
-} else {
-    $month = $_POST['month'];
-    $year = $_POST['year'];
-}
-
-// Get the first day of the month
-$start = mktime(12, 0, 0, $month, 1, $year);
-$firstDayArray = getdate($start);
-
-// Get the total number of days in the month
-$totalDays = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 ?>
+<!-- index.html -->
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="stylesheet" type="text/css" href="css/styles.css" />
-    <title>Calendar Booking</title>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		content="width=device-width, 
+				initial-scale=1.0">
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
+                <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/calendar.css">
+	<title>Dynamic Calendar</title>
 </head>
+
 <body>
-    
-<?php
-
-    
-
-// Check if the user is logged in and session variables exist
-if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ) {
-    // Check if groupID is not null
-    if (!empty($_SESSION["groupID"])) {
-        $query = "SELECT * FROM tbl_events WHERE groupID = ?";
-        if ($stmt = mysqli_prepare($link, $query)) {
-            mysqli_stmt_bind_param($stmt, "i", $_SESSION["groupID"]);
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-        } else {
-            die("Database query preparation failed: " . mysqli_error($link));
-        }
-    }
-    else{
-        echo '<button class="btn btn-primary mb-3" data-toggle="modal" data-target="#createEventModal">Create Event</button>';
-    }
-} else {
-    // Default query for users without a group
-    $query = "SELECT * FROM tbl_events";
-    $result = mysqli_query($link, $query);
-    if ($result === false) {
-        die("Database query failed: " . mysqli_error($link));
-    }
-}
-        ?>
-
-
-
-
-
-<h1>Calendar Booking</h1>  
-
-<form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
-
-    <select name="month" class="monthSelect">
-    <?php
-    $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
-    for ($x = 1; $x <= count($months); $x++) {
-        echo "<option value=\"$x\"";
-        if ($x == $month) {
-            echo " selected";
-        }
-        echo ">" . $months[$x - 1] . "</option>";
-    }
-    ?>
-    </select>
-
-    <select name="year" class="yearSelect">
-    <?php
-    for ($x = 2022; $x <= 2023; $x++) {
-        echo "<option";
-        if ($x == $year) {
-            echo " selected";
-        }
-        echo ">$x</option>";
-    }
-    ?>
-    </select>
-
-    <button type="submit" class="displayBtn" name="submit" value="submit">Display</button>
-</form>
-<br/>
-
-<?php
-// DISPLAY THE DAYS OF THE WEEK
-$days = array("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
-echo "<table><tr>\n";
-foreach ($days as $day) {
-    echo "<td class='daysOfTheWeek'>$day</td>\n";
-}
-echo "</tr><tr>";
-
-// FIND THE STARTING EMPTY CELLS
-for ($i = 0; $i < $firstDayArray['wday']; $i++) {
-    echo "<td>&nbsp;</td>\n";  // empty cells before the first day
-}
-
-
-// DISPLAY THE DAYS OF THE MONTH
-for ($day = 1; $day <= $totalDays; $day++) {
-    echo "<td>$day</td>\n";
-
-    // Check if a new row is needed after Saturday (6th day of the week)
-    if (($firstDayArray['wday'] + $day - 1) % 7 == 6) {
-        echo "</tr><tr>\n";
-    }
-}
-
-// FILL IN THE REMAINING EMPTY CELLS
-$lastDayOfWeek = ($firstDayArray['wday'] + $totalDays - 1) % 7;
-for ($i = $lastDayOfWeek; $i < 6; $i++) {
-    echo "<td>&nbsp;</td>\n";  // empty cells after the last day
-}
-
-echo "</tr></table>";
-?>
-
+	<div class="container">
+			<div id="right">
+				<h3 id="monthAndYear"></h3>
+				<div class="button-container-calendar">
+					<button id="previous"
+							onclick="previous()">
+						‹
+					</button>
+					<button id="next"
+							onclick="next()">
+						›
+					</button>
+				</div>
+				<table class="table-calendar"
+					id="calendar"
+					data-lang="en">
+					<thead id="thead-month"></thead>
+					<!-- Table body for displaying the calendar -->
+					<tbody id="calendar-body"></tbody>
+				</table>
+				<div class="footer-container-calendar">
+					<label for="month">Jump To: </label>
+					<!-- Dropdowns to select a specific month and year -->
+					<select id="month" onchange="jump()">
+						<option value=0>Jan</option>
+						<option value=1>Feb</option>
+						<option value=2>Mar</option>
+						<option value=3>Apr</option>
+						<option value=4>May</option>
+						<option value=5>Jun</option>
+						<option value=6>Jul</option>
+						<option value=7>Aug</option>
+						<option value=8>Sep</option>
+						<option value=9>Oct</option>
+						<option value=10>Nov</option>
+						<option value=11>Dec</option>
+					</select>
+					<!-- Dropdown to select a specific year -->
+					<select id="year" onchange="jump()"></select>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Include the JavaScript file for the calendar functionality -->
+	<script src="./script.js"></script>
 </body>
+
 </html>
 
-+
+
+<script>
+
+
+// Function to generate a range of 
+// years for the year select input
+function generate_year_range(start, end) {
+	let years = "";
+	for (let year = start; year <= end; year++) {
+		years += "<option value='" +
+			year + "'>" + year + "</option>";
+	}
+	return years;
+}
+
+// Initialize date-related letiables
+today = new Date();
+currentMonth = today.getMonth();
+currentYear = today.getFullYear();
+selectYear = document.getElementById("year");
+selectMonth = document.getElementById("month");
+
+createYear = generate_year_range(1970, 2050);
+
+document.getElementById("year").innerHTML = createYear;
+
+let calendar = document.getElementById("calendar");
+
+let months = [
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December"
+];
+let days = [
+	"Sun", "Mon", "Tue", "Wed",
+	"Thu", "Fri", "Sat"];
+
+$dataHead = "<tr>";
+for (dhead in days) {
+	$dataHead += "<th data-days='" +
+		days[dhead] + "'>" +
+		days[dhead] + "</th>";
+}
+$dataHead += "</tr>";
+
+document.getElementById("thead-month").innerHTML = $dataHead;
+
+monthAndYear =
+	document.getElementById("monthAndYear");
+showCalendar(currentMonth, currentYear);
+
+// Function to navigate to the next month
+function next() {
+	currentYear = currentMonth === 11 ?
+		currentYear + 1 : currentYear;
+	currentMonth = (currentMonth + 1) % 12;
+	showCalendar(currentMonth, currentYear);
+}
+
+// Function to navigate to the previous month
+function previous() {
+	currentYear = currentMonth === 0 ?
+		currentYear - 1 : currentYear;
+	currentMonth = currentMonth === 0 ?
+		11 : currentMonth - 1;
+	showCalendar(currentMonth, currentYear);
+}
+
+// Function to jump to a specific month and year
+function jump() {
+	currentYear = parseInt(selectYear.value);
+	currentMonth = parseInt(selectMonth.value);
+	showCalendar(currentMonth, currentYear);
+}
+
+// Function to display the calendar
+function showCalendar(month, year) {
+	let firstDay = new Date(year, month, 1).getDay();
+	tbl = document.getElementById("calendar-body");
+	tbl.innerHTML = "";
+	monthAndYear.innerHTML = months[month] + " " + year;
+	selectYear.value = year;
+	selectMonth.value = month;
+
+	let date = 1;
+	for (let i = 0; i < 6; i++) {
+		let row = document.createElement("tr");
+		for (let j = 0; j < 7; j++) {
+			if (i === 0 && j < firstDay) {
+				cell = document.createElement("td");
+				cellText = document.createTextNode("");
+				cell.appendChild(cellText);
+				row.appendChild(cell);
+			} else if (date > daysInMonth(month, year)) {
+				break;
+			} else {
+				cell = document.createElement("td");
+				cell.setAttribute("data-date", date);
+				cell.setAttribute("data-month", month + 1);
+				cell.setAttribute("data-year", year);
+				cell.setAttribute("data-month_name", months[month]);
+				cell.className = "date-picker";
+				cell.innerHTML = "<span>" + date + "</span";
+
+				if (
+					date === today.getDate() &&
+					year === today.getFullYear() &&
+					month === today.getMonth()
+				) {
+					cell.className = "date-picker selected";
+				}
+
+				// Check if there are events on this date
+				if (hasEventOnDate(date, month, year)) {
+					cell.classList.add("event-marker");
+					cell.appendChild(
+						createEventTooltip(date, month, year)
+				);
+				}
+
+				row.appendChild(cell);
+				date++;
+			}
+		}
+		tbl.appendChild(row);
+	}
+
+}
+
+
+
+// Function to get the number of days in a month
+function daysInMonth(iMonth, iYear) {
+	return 32 - new Date(iYear, iMonth, 32).getDate();
+}
+
+// Call the showCalendar function initially to display the calendar
+showCalendar(currentMonth, currentYear);
+</script>

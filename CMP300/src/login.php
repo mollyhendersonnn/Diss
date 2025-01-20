@@ -65,7 +65,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION['groupID'] = $groupID;
 
                             //Audit log
-                           // auditAction($userID, "User logged in: $userID");
+                             
+    // $userID = $_SESSION["userID"];
+    // $action = "User logged in";
+    // logAction($link, $userID, $action);
 
                             // Redirect to the dashboard
                             header("Location: dashboard.php");
