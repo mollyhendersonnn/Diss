@@ -6,6 +6,8 @@ session_start();
 include_once("connection.php");
 include_once("navigation.php");  // Include navigation bar
 
+
+
 // Ensure error reporting is enabled for debugging
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
@@ -49,6 +51,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['rsvp'])) {
         }
     }
 }
+
+// Retrieve current number of attendees
+$query = "SELECT numAttendees FROM tbl_events WHERE eventID = ?";
+$numAttendees = null;
+if ($stmt = mysqli_prepare($link, $query)) {
+    mysqli_stmt_bind_param($stmt, "i", $eventID);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $numAttendees);
+    mysqli_stmt_fetch($stmt);
+}
 ?>
 
 <!DOCTYPE html>
@@ -56,6 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['rsvp'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <button class="btn btn-secondary mb-3" onclick="window.location.href='dashboard.php';">Back</button>
     <title>Event Details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
@@ -68,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['rsvp'])) {
         <p><strong>Start:</strong> <?php echo htmlspecialchars($event['eventStart']); ?></p>
         <p><strong>End:</strong> <?php echo htmlspecialchars($event['eventEnd']); ?></p>
         <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true): ?>
-        <p><strong>Attendees:</strong> <?php echo htmlspecialchars($event['numAttendees']); ?></p>
+            <p><strong>Attendees:</strong> <?php echo isset($numAttendees) ? htmlspecialchars($numAttendees) : "0"; ?></p>
         <?php endif; ?>
        
             <form method="post">
