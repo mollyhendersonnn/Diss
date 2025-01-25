@@ -1,7 +1,4 @@
-
-
 <?php
-
 
 // Start the session
 if (session_status() === PHP_SESSION_NONE) {
@@ -19,62 +16,61 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 }
 
 // Check if eventID is provided
-if (!isset($_GET['eventID'])) {
+if (!isset($_GET['eventID']) || empty($_GET['eventID'])) {
     echo json_encode(["success" => false, "message" => "No event ID provided."]);
     exit;
 }
 
-$eventID = $_GET['eventID'];
+$eventID = intval($_GET['eventID']); // Ensure eventID is an integer
 $userID = $_SESSION["userID"];
 
 // Fetch the event details
-$query = "SELECT * FROM tbl_events WHERE eventID = ?";
+$query = "SELECT eventID, eventTitle, eventType, eventDescription, eventStart, eventEnd, userID, groupID FROM tbl_events WHERE eventID = ?";
 if ($stmt = mysqli_prepare($link, $query)) {
     mysqli_stmt_bind_param($stmt, "i", $eventID);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_bind_result($stmt, $eventID, $eventTitle, $eventType, $eventDescription, $eventStart, $eventEnd, $userID, $groupID);
-    mysqli_stmt_fetch($stmt);
-    $event = [
-        'eventID' => $eventID,
-        'eventTitle' => $eventTitle,
-        'eventType' => $eventType,
-        'eventDescription' => $eventDescription,
-        'eventStart' => $eventStart,
-        'eventEnd' => $eventEnd,
-        'userID' => $userID,
-        'groupID' => $groupID,
-        'archiveReason' => $archiveReason = 2
-    ];
+
+    if (!mysqli_stmt_fetch($stmt)) {
+        echo json_encode(["success" => false, "message" => "Event not found."]);
+        mysqli_stmt_close($stmt);
+        exit;
+    }
     mysqli_stmt_close($stmt);
 } else {
     echo json_encode(["success" => false, "message" => "Failed to fetch event details."]);
     exit;
 }
 
-
-// Insert the event into tbl_archive
-$query = "INSERT INTO tbl_archive (eventID, eventTitle, eventType, eventDescription, eventStart, eventEnd, userID, groupID, archiveReason) 
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+// Archive the event
+$query = "INSERT INTO tbl_archive (stateID, groupID, userID, eventTitle, eventType, eventStart, eventEnd, archiveReason) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 if ($stmt = mysqli_prepare($link, $query)) {
-    mysqli_stmt_bind_param($stmt, "isssssiii", $event['eventID'], $event['eventTitle'], $event['eventType'], $event['eventDescription'], $event['eventStart'], $event['eventEnd'], $event['userID'], $event['groupID'], $event['archiveReason']);
+    $stateID = 2; 
+    $archiveReason = 2; 
+
+    mysqli_stmt_bind_param($stmt, "iiissssi", $stateID, $groupID, $userID, $eventTitle, $eventType, $eventStart, $eventEnd, $archiveReason);
+
     if (mysqli_stmt_execute($stmt)) {
-        // Delete the archived events from tbl_events
-        $deleteQuery = "DELETE FROM tbl_events WHERE eventEnd < ? AND stateID = 1";
-    
-        if ($stmt = mysqli_prepare($link, $deleteQuery)) {
-            mysqli_stmt_bind_param($stmt, "s", $currentDate);
-            if (!mysqli_stmt_execute($stmt)) {
-                echo "Error deleting events: " . mysqli_error($link);
+        // Delete the event from tbl_events
+        $deleteQuery = "DELETE FROM tbl_events WHERE eventID = ?";
+        if ($deleteStmt = mysqli_prepare($link, $deleteQuery)) {
+            mysqli_stmt_bind_param($deleteStmt, "i", $eventID);
+            if (mysqli_stmt_execute($deleteStmt)) {
+                echo json_encode(["success" => true, "message" => "Event archived and deleted successfully."]);
+            } else {
+                echo json_encode(["success" => false, "message" => "Failed to delete the event."]);
             }
-            mysqli_stmt_close($stmt);
+            mysqli_stmt_close($deleteStmt);
         } else {
-            echo "Error preparing delete query: " . mysqli_error($link);
+            echo json_encode(["success" => false, "message" => "Failed to prepare delete query."]);
         }
     } else {
-        echo json_encode(["success" => false, "message" => "Failed to archive event."]);
+        echo json_encode(["success" => false, "message" => "Failed to archive the event."]);
     }
     mysqli_stmt_close($stmt);
 } else {
-    echo json_encode(["success" => false, "message" => "Database query preparation failed."]);
+    echo json_encode(["success" => false, "message" => "Failed to prepare archive query."]);
 }
+
 ?>

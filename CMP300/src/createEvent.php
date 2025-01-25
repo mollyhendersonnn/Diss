@@ -8,9 +8,6 @@ include_once("connection.php");
 include_once("navigation.php");  // Make sure this file contains your navigation bar
 //include("audit.php");
 
-// Ensure error reporting is enabled for debugging
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 
 // Check if the user is logged in
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
@@ -44,9 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($stmt = mysqli_prepare($link, $query)) {
         // Bind parameters and execute the query
         mysqli_stmt_bind_param($stmt, "siissssss", $imageContent, $userID, $groupID, $stateID, $eventTitle, $eventType, $eventDescription, $eventStart, $eventEnd);
-
-        // Debugging: Show the SQL query for verification
-        echo "<pre>SQL Query: " . mysqli_stmt_get_result($stmt) . "</pre>";  // Display SQL
 
         if (mysqli_stmt_execute($stmt)) {
             // Audit action and success response
