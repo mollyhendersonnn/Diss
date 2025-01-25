@@ -1,7 +1,5 @@
 Hiya here are some tasks:
 
--arrows in calendar to sandwhich the date 
-
 -RVSP Successfull (keep consistent)
 
 -update event (successfull popup - keep consistent)
@@ -9,6 +7,7 @@ Hiya here are some tasks:
 -dropdown for Event Type (Create Event)
 
 
+--arrows in calendar to sandwhich the date (DONE)
 -login container to input fields smaller (DONE)
 
 
