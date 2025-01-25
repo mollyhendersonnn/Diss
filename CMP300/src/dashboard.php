@@ -29,32 +29,57 @@ error_reporting(E_ALL);
 
 <body>
     <?php
-    // Check if the user is logged in and session variables exist
-    if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-        if (!empty($_SESSION["groupID"])) {
-            $query = "SELECT eventID, eventTitle, eventType, eventDescription, eventStart 
-                      FROM tbl_events WHERE groupID = ? AND stateID = 1";
-            if ($stmt = mysqli_prepare($link, $query)) {
-                mysqli_stmt_bind_param($stmt, "i", $_SESSION["groupID"]);
-                mysqli_stmt_execute($stmt);
-                $result = mysqli_stmt_get_result($stmt);
-                echo '<a href="createEvent.php" class="btn btn-primary mb-3">Create Event</a>';
-            } else {
-                die("Database query preparation failed: " . mysqli_error($link));
-            }
+
+// Start the session
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Include database connection
+include_once("connection.php");
+include_once("navigation.php");
+
+// Initialize the result variable
+$result = null;
+
+
+// Check if the user is logged in and session variables exist
+if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+    if (!empty($_SESSION["groupID"])) {
+        $query = "SELECT eventID, eventTitle, eventType, eventStart 
+                  FROM tbl_events WHERE groupID = ? AND stateID = 1";
+        if ($stmt = mysqli_prepare($link, $query)) {
+            mysqli_stmt_bind_param($stmt, "i", $_SESSION["groupID"]);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
         } else {
-            $query = "SELECT eventID, eventTitle, eventType, eventDescription, eventStart 
-                      FROM tbl_events WHERE stateID = 1";
-            $result = mysqli_query($link, $query);
-            if ($result === false) {
-                die("Database query failed: " . mysqli_error($link));
-            }
+            die("Database query preparation failed: " . mysqli_error($link));
+        }
+    } else {
+        // If the user is logged in but has no group, fetch all active events
+        $query = "SELECT eventID, eventTitle, eventType, eventStart 
+                  FROM tbl_events WHERE stateID = 1";
+        $result = mysqli_query($link, $query);
+        if ($result === false) {
+            die("Database query failed: " . mysqli_error($link));
         }
     }
-    ?>
+} else {
+    // If the user is not logged in, fetch all active events
+    $query = "SELECT eventID, eventTitle, eventType, eventStart 
+              FROM tbl_events WHERE stateID = 1";
+    $result = mysqli_query($link, $query);
+    if ($result === false) {
+        die("Database query failed: " . mysqli_error($link));
+    }
+}
+?>
+
+    
 
     <div class="container mt-5">
         <h2 class="mb-4">Events</h2>
+        <a href="createEvent.php" class="btn btn-primary mb-3">Create Event</a>
         <input type="text" id="searchBar" class="form-control mb-3" placeholder="Search for events...">
         <table class="table table-bordered table-striped">
         <thead class="thead-dark">
@@ -62,7 +87,6 @@ error_reporting(E_ALL);
         <!-- Define static column headers -->
         <th>Event Title</th>
         <th>Event Type</th>
-        <th>Event Description</th>
         <th>Start Date</th>
     </tr>
 </thead>
@@ -71,11 +95,14 @@ error_reporting(E_ALL);
     // Display only the required columns
     if ($result && mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
+
+            $eventStartDate = new DateTime($row['eventStart']);
+            $formattedDate = $eventStartDate->format('l jS F Y H:i');
+
             echo "<tr>";
             echo "<td><a href='eventDetails.php?eventID=" . htmlspecialchars($row['eventID']) . "'>" . htmlspecialchars($row['eventTitle']) . "</a></td>";
             echo "<td>" . htmlspecialchars($row['eventType']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['eventDescription']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['eventStart']) . "</td>";
+            echo "<td>" . $formattedDate . "</td>";
             echo "</tr>";
         }
     } else {
@@ -84,23 +111,45 @@ error_reporting(E_ALL);
 
 
     
-    function updateEventStates($link) {
+    function archiveExpiredEvents($link) {
         $currentDate = date("Y-m-d H:i:s");
+        $archiveReason = 1;
     
-        // Prepare the SQL query to update the event state
-        $query = "UPDATE tbl_events SET stateID = 2 WHERE eventEnd < ? AND stateID = 1";
+        // Insert expired events into tbl_archive
+        $sql = "
+        INSERT INTO `tbl_archive` (`eventID`, `stateID`, `groupID`, `userID`, `eventTitle`, `eventType`, `eventStart`, `eventEnd`, `numAttendees`)
+        SELECT eventID, stateID, groupID, userID, eventTitle, eventType, eventStart, eventEnd, numAttendees
+        FROM tbl_events
+        WHERE eventEnd < ? AND stateID = 2";
     
-        if ($stmt = mysqli_prepare($link, $query)) {
+    
+        if ($stmt = mysqli_prepare($link, $sql)) {
             mysqli_stmt_bind_param($stmt, "s", $currentDate);
-    
+            if (!mysqli_stmt_execute($stmt)) {
+                echo "Error archiving events: " . mysqli_error($link);
+            }
             mysqli_stmt_close($stmt);
         } else {
-            echo "Database query preparation failed: " . mysqli_error($link);
+            echo "Error preparing archive query: " . mysqli_error($link);
+        }
+    
+        // Delete the archived events from tbl_events
+        $deleteQuery = "DELETE FROM tbl_events WHERE eventEnd < ? AND stateID = 2";
+    
+        if ($stmt = mysqli_prepare($link, $deleteQuery)) {
+            mysqli_stmt_bind_param($stmt, "s", $currentDate);
+            if (!mysqli_stmt_execute($stmt)) {
+                echo "Error deleting events: " . mysqli_error($link);
+            }
+            mysqli_stmt_close($stmt);
+        } else {
+            echo "Error preparing delete query: " . mysqli_error($link);
         }
     }
     
+    
     // Call the function to update event states
-    updateEventStates($link);
+    archiveExpiredEvents($link);
     ?>
 
 </tbody>

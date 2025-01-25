@@ -4,39 +4,36 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 include("connection.php");
 
-// Keep just one debug line to help us monitor session state
-if (!function_exists('writeLog')) {
-    function writeLog($message) {
-        $logFile = __DIR__ . '/debug.log';
-        $timestamp = date('Y-m-d H:i:s');
-        file_put_contents($logFile, "[$timestamp] $message\n", FILE_APPEND);
-    }
-}
-writeLog("Navigation - Session data: " . print_r($_SESSION, true));
 ?>
+
+<div class="header-banner">
+    <img src="css/images/Acc_Logo_All_White_RGB.png" alt="Logo" class="logo">
+    <button class="btn btn-secondary mb-3" onclick="history.back()">Back</button>
+</div>
+
 
 <div class="navigation">
     <ul>
-        <li><a href="dashboard.php">Home</a></li>
-        <li><a href="calendar.php">Calendar</a></li>
+        <li><a href="dashboard.php">HOME</a></li>
+        <li><a href="calendar.php">CALENDAR</a></li>
         <?php
         // Check if the user is logged in and session variables exist
         if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && isset($_SESSION["roleID"])) {
             // Show options for Role ID 1
             if ($_SESSION["roleID"] == 1) {
-                echo '<li><a href="createUser.php">Create User</a></li>';
-                echo '<li><a href="audit.php">Audit</a></li>';
-                echo '<li><a href="archive.php">Archive</a></li>';
+                echo '<li><a href="createUser.php">USER</a></li>';
+                echo '<li><a href="audit.php">AUDIT</a></li>';
+                echo '<li><a href="archive.php">HISTORICAL EVENT</a></li>';
             }
             // Show options for Role ID 2
             elseif ($_SESSION["roleID"] == 2) {
-                echo '<li><a href="archive.php">Archive</a></li>';
+                echo '<li><a href="archive.php">HISTORICAL EVENTS</a></li>';
             }
             // Logout option for all logged-in users
-            echo '<li><a href="logout.php">Logout</a></li>';
+            echo '<li><a href="logout.php">LOGOUT</a></li>';
         } else {
             // Show login option for guests
-            echo '<li><a href="login.php">Login</a></li>';
+            echo '<li><a href="login.php">LOGIN</a></li>';
         }
         ?>
     </ul>
