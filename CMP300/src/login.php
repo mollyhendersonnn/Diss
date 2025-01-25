@@ -9,13 +9,7 @@ include_once("connection.php");
 include_once("navigation.php");
 //include_once("audit.php");
 
-// Log errors for debugging (update path as needed)
-$logFile = __DIR__ . '/debug_log.txt';
-function logToFile($message) {
-    global $logFile;
-    $timestamp = date('Y-m-d H:i:s');
-    file_put_contents($logFile, "[$timestamp] $message" . PHP_EOL, FILE_APPEND);
-}
+
 
 // Initialize variables
 $enterpriseID = $password = "";
@@ -75,22 +69,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             exit();
                         } else {
                             $login_err = "Invalid password.";
-                            logToFile("Failed login attempt for Enterprise ID: $enterpriseID (Incorrect Password)");
                         }
                     }
                 } else {
                     $login_err = "No account found with that Enterprise ID.";
-                    logToFile("Failed login attempt for Enterprise ID: $enterpriseID (No Account Found)");
+                   
                 }
             } else {
-                logToFile("Database query failed: " . mysqli_error($link));
+    
                 echo "Oops! Something went wrong. Please try again later.";
             }
 
             // Close statement
             mysqli_stmt_close($stmt);
-        } else {
-            logToFile("Failed to prepare statement: " . mysqli_error($link));
+     
         }
     }
 
@@ -108,7 +100,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Login</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/styles.css">
 
 </head>
 

@@ -68,7 +68,6 @@ if ($stmt = mysqli_prepare($link, $query)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <button class="btn btn-secondary mb-3" onclick="window.location.href='dashboard.php';">Back</button>
     <title>Event Details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
@@ -94,7 +93,8 @@ if ($stmt = mysqli_prepare($link, $query)) {
             <a href="downloadFile.php?eventID=<?php echo $eventID; ?>" class="btn btn-success mt-3">Download Event File</a>
         <?php endif; ?>
 
-        <a href="cancelEvent.php" class="btn btn-primary mb-3">Cancel Event</a>
+        <a href="updateEvent.php?eventID=<?php echo $eventID; ?>" class="btn btn-success mt-3">Update Event</a>
+        <a href="cancelEvent.php?eventID=<?php echo $eventID; ?>" class="btn btn-danger mt-3">Cancel Event</a>
     </div>
 </body>
 </html>
