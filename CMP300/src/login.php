@@ -105,8 +105,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <div class="login-container">
-        <h2>Login</h2>
-        <p>Please fill in your credentials to login.</p>
 
         <?php 
         if (!empty($login_err)) {
@@ -114,16 +112,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         ?>
 
+        <?php
+        $customInputClass = 'input.custom'; // Set this dynamically if needed
+        ?>
+
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <div class="form-group <?php echo (!empty($enterpriseID_err)) ? 'has-error' : ''; ?>">
+            <h2>Login</h2>
+            <br>
+            
+            <div class="form-group content <?php echo (!empty($enterpriseID_err)) ? 'has-error' : ''; ?>">
                 <label for="enterpriseID">Enterprise ID</label>
-                <input type="text" id="enterpriseID" name="enterpriseID" class="form-control" value="<?php echo htmlspecialchars($enterpriseID); ?>">
+                <input type="text" id="enterpriseID" placeholder="example@domain.com" name="enterpriseID" class="form-control <?php echo $customInputClass; ?>" value="<?php echo htmlspecialchars($enterpriseID); ?>">
                 <span class="help-block"><?php echo $enterpriseID_err; ?></span>
             </div> 
 
-            <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
+            <div class="form-group content <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" class="form-control">
+                <input type="password" id="password" name="password" class="form-control <?php echo $customInputClass; ?>">
                 <span class="help-block"><?php echo $password_err; ?></span>
             </div>
 
