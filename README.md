@@ -6,6 +6,14 @@ Hiya here are some tasks:
 
 -dropdown for Event Type (Create Event)
 
+-dropdown in create user for roles etc
+
+-make create user form smaller
+
+- br under Titles
+
+- Archived event (title, Cancelled? to Status)
+
 --------------------------------------------------------------------------
 -arrows in calendar to sandwhich the date (DONE)
 
