@@ -97,27 +97,25 @@ body {
 }
 
 .success-message {
-    color: green;
+    color: #00a500;
     font-size: 18px;
-    font-weight: bold;
+    font-weight: lighter;
     background-color: #e0f8e0; /* Light green background for contrast */
     padding: 10px;
-    border: 1px solid green;
+    border: 1px solid #ffffff;
     border-radius: 5px;
     text-align: center;
-    width: 250px;
   }
 
   .fail-message {
-    color: red;
+    color: #000000;
     font-size: 18px;
-    font-weight: bold;
-    background-color: #ac5858; /* Light green background for contrast */
+    font-weight: lighter;
+    background-color: #ffbed6; /* Light green background for contrast */
     padding: 10px;
-    border: 1px solid red;
+    border: 1px solid #ffffff;
     border-radius: 5px;
     text-align: center;
-    width: 100px;
   }
 
   .corner-alert {
