@@ -4,20 +4,20 @@ Hiya here are some tasks:
 
 -update event (successfull popup - keep consistent)
 
--dropdown for Event Type (Create Event)
+-dropdown for Event Type (Create Event - DONE BUT NEEDS PHP)
 
--dropdown in create user for roles etc
+-dropdown in create user for roles etc ()
 
--make create user form smaller
+-br under Titles
 
-- br under Titles
-
-- Archived event (title, Cancelled? to Status)
+-Archived event (Cancelled? to Status)
 
 --------------------------------------------------------------------------
 -arrows in calendar to sandwhich the date (DONE)
 
 -login container to input fields smaller (DONE)
+
+-make create user form smaller (DONE)
 
 --------------------------------------------------------------------------
 
