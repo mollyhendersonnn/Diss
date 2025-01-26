@@ -10,11 +10,15 @@ POPUPS
 -dropdown for Event Type (Create Event - DONE BUT NEEDS PHP)
 
 --------------------------------------------------------------------------
--arrows in calendar to sandwhich the date (DONE)
+-Arrows in calendar to sandwhich the date (DONE)
 
--login container to input fields smaller (DONE)
+-Login container to input fields smaller (DONE)
 
--make create user form smaller (DONE)
+-Make all input fields form smaller (DONE)
+  -Create User
+  -Create Event
+  -Update Event
+  -Update Archive
 
 -br under Titles (Double check)
 
