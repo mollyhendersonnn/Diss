@@ -1,6 +1,6 @@
 Hiya here are some tasks:
 
--RVSP Successfull (keep consistent)
+
 
 -update event & archive event (successfull popup - after page navigation)
 
@@ -20,6 +20,8 @@ Hiya here are some tasks:
 -make create user form smaller (DONE)
 
 -br under Titles (Double check)
+
+-RVSP Successfull (DONE)
 
 --------------------------------------------------------------------------
 
