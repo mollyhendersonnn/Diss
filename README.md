@@ -6,13 +6,13 @@ Hiya here are some tasks:
 
 -update event back in time (no error)
 
--dropdown for Event Type (Create Event - DONE BUT NEEDS PHP)
-
 -dropdown in create user for roles etc ()
 
 -br under Titles
 
 -Archived event (Cancelled? to Status)
+
+-dropdown for Event Type (Create Event - DONE BUT NEEDS PHP)
 
 --------------------------------------------------------------------------
 -arrows in calendar to sandwhich the date (DONE)
