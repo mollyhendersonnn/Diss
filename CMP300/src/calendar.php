@@ -42,7 +42,6 @@ echo "<script>const dbEvents = " . json_encode($events, JSON_HEX_TAG | JSON_HEX_
     <div class="container">
         <br>
         <div id="right">
-        <div id="right">
         <button id="previous" aria-label="Previous Month" onclick="previous()">‹</button>
         <h3 id="monthAndYear"></h3>
         <button id="next" aria-label="Next Month" onclick="next()">›</button>
