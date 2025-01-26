@@ -101,7 +101,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
                 <div class="mb-3">
                     <label for="eventType" class="form-label">Event Type</label>
-                    <input type="text" class="form-control w-50" id="eventType" name="eventType" value="<?php echo htmlspecialchars($event['eventType']); ?>" required>
+                    <select type="text" class="form-control w-50" id="dropdown" value="" name="dropdown" required="">
+                    <option value="" selected="" disabled="">Select an Event Type</option>
+                    <option value="option1">Lunch & Learns</option>
+                    <option value="option2">Town Halls</option>
+                    <option value="option3">Holiday Party</option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label for="eventDescription" class="form-label">Event Description</label>
