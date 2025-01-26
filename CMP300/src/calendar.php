@@ -40,13 +40,19 @@ echo "<script>const dbEvents = " . json_encode($events, JSON_HEX_TAG | JSON_HEX_
 
 <body>
     <div class="container">
+        <br>
         <div id="right">
+        <div id="right">
+        <button id="previous" aria-label="Previous Month" onclick="previous()">‹</button>
+        <h3 id="monthAndYear"></h3>
+        <button id="next" aria-label="Next Month" onclick="next()">›</button>
+        </div>
 
-
-            <button id="previous" onclick="previous()">‹</button> <h3 id="monthAndYear"></h3> <button id="next" onclick="next()">›</button>
-  
+            <!-- <button id="previous" onclick="previous()">‹</button> <h3 id="monthAndYear"></h3> <button id="next" onclick="next()">›</button>
+   -->
             <!-- create event button might go here -->
         </div>
+        <br>
         <table class="table-calendar" id="calendar" data-lang="en">
             <thead id="thead-month"></thead>
             <!-- Table body for displaying the calendar -->

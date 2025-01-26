@@ -93,32 +93,32 @@ mysqli_close($link);
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" class="form-control" <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
+                <input type="text" id="username" name="username" class="form-control w-50" <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
                 <span class="invalid-feedback"><?php echo $username_err; ?></span>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" class="form-control" <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>">
+                <input type="password" id="password" name="password" class="form-control w-50" <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>">
                 <span class="invalid-feedback"><?php echo $password_err; ?></span>
             </div>
             <div class="form-group">
                 <label for="firstname">First Name</label>
                 <input type="text" id="firstname" name="firstname"
-                    class="form-control <?php echo (!empty($firstname_err)) ? 'is-invalid' : ''; ?>"
+                    class="form-control w-50 <?php echo (!empty($firstname_err)) ? 'is-invalid' : ''; ?>"
                     value="<?php echo $firstname; ?>">
                 <span class="invalid-feedback"><?php echo $firstname_err; ?></span>
             </div>
             <div class="form-group">
                 <label for="roleID">Role ID</label>
                 <input type="number" id="roleID" name="roleID"
-                    class="form-control <?php echo (!empty($roleID_err)) ? 'is-invalid' : ''; ?>"
+                    class="form-control w-50 <?php echo (!empty($roleID_err)) ? 'is-invalid' : ''; ?>"
                     value="<?php echo $roleID; ?>">
                 <span class="invalid-feedback"><?php echo $roleID_err; ?></span>
             </div>
             <div class="form-group">
                 <label for="groupID">Group ID</label>
                 <input type="number" id="groupID" name="groupID"
-                    class="form-control <?php echo (!empty($groupID_err)) ? 'is-invalid' : ''; ?>"
+                    class="form-control w-50 <?php echo (!empty($groupID_err)) ? 'is-invalid' : ''; ?>"
                     value="<?php echo $groupID; ?>">
                 <span class="invalid-feedback"><?php echo $groupID_err; ?></span>
             </div>

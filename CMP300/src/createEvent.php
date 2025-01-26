@@ -56,6 +56,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 ?>
 
+<!--to fix php-->
+<?php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $selected = $_POST['dropdown'];
+    echo "You selected: " . htmlspecialchars($selected);
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,30 +78,36 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <body>
      <div class="container mt-5">
         <h2>Create Event</h2>
+        <br>
             <form action="createEvent.php" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="eventTitle" class="form-label">Event Title</label>
-                    <input type="text" class="form-control" id="eventTitle" name="eventTitle" required>
+                    <input type="text" class="form-control w-50" id="eventTitle" name="eventTitle" required>
                 </div>
                 <div class="mb-3">
                     <label for="eventType" class="form-label">Event Type</label>
-                    <input type="text" class="form-control" id="eventType" name="eventType" required>
+                    <select type="text" class="form-control w-50" id="dropdown" value="" name="dropdown" required="">
+                    <option value="" selected="" disabled="">Select an Event Type</option>
+                    <option value="option1">Lunch & Learns</option>
+                    <option value="option2">Town Halls</option>
+                    <option value="option3">Holiday Party</option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label for="eventDescription" class="form-label">Event Description</label>
-                    <textarea class="form-control" id="eventDescription" name="eventDescription" rows="3" required></textarea>
+                    <textarea class="form-control w-50" id="eventDescription" name="eventDescription" rows="3" required></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="eventStart" class="form-label">Start Date and Time</label>
-                    <input type="datetime-local" class="form-control" id="eventStart" name="eventStart" required>
+                    <input type="datetime-local" class="form-control w-auto" id="eventStart" name="eventStart" required>
                 </div>
                 <div class="mb-3">
                     <label for="eventEnd" class="form-label">End Date and Time</label>
-                    <input type="datetime-local" class="form-control" id="eventEnd" name="eventEnd" required>
+                    <input type="datetime-local" class="form-control w-auto" id="eventEnd" name="eventEnd" required>
                 </div>
                 <div class="mb-3">
                     <label for="eventFile" class="form-label">Event File</label>
-                    <input type="file" class="form-control" id="eventFile" name="eventFile">
+                    <input type="file" class="form-control w-50" id="eventFile" name="eventFile">
                 </div>
                 <button type="submit" class="btn btn-primary">Create Event</button>
             </form>
