@@ -8,8 +8,6 @@ Hiya here are some tasks:
 
 -dropdown in create user for roles etc ()
 
--br under Titles
-
 -Archived event (Cancelled? to Status)
 
 -dropdown for Event Type (Create Event - DONE BUT NEEDS PHP)
@@ -20,6 +18,8 @@ Hiya here are some tasks:
 -login container to input fields smaller (DONE)
 
 -make create user form smaller (DONE)
+
+-br under Titles (Double check)
 
 --------------------------------------------------------------------------
 
