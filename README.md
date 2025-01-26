@@ -10,6 +10,9 @@ POPUPS
 
 -dropdown for Event Type (Create Event - DONE BUT NEEDS PHP)
 
+-not logged in > edit event > remove all button
+
+
 --------------------------------------------------------------------------
 -Arrows in calendar to sandwhich the date (DONE)
 
@@ -26,6 +29,8 @@ POPUPS
 -RVSP Successfull (DONE)
 
 -Archived event (Cancelled? - Changed to Outcome) (DONE)
+
+- Unsuccesful Login PopUps (DONE)
 
 --------------------------------------------------------------------------
 
