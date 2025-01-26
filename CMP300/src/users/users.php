@@ -73,7 +73,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
             $groupName = $row['groupName'];
 
             echo "<tr>";
-            echo "<td><a href='userDetails.php?enterpriseID=" . htmlspecialchars($row['userID']) . "'>" . htmlspecialchars($row['enterpriseID']) . "</a></td>";
+            echo "<td><a href='userDetails.php?userID=" . htmlspecialchars($row['userID']) . "'>" . htmlspecialchars($row['enterpriseID']) . "</a></td>";
             echo "<td>" . htmlspecialchars($row['firstName']) . "</td>";
             echo "<td>" . htmlspecialchars($groupName) . "</td>";
             echo "<td>" . htmlspecialchars($roleName) . "</td>";
