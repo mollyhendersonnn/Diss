@@ -103,7 +103,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
             $formattedDate = $eventStartDate->format('l jS F Y H:i');
 
             echo "<tr>";
-            echo "<td><a href='eventDetails.php?eventID=" . htmlspecialchars($row['eventID']) . "'>" . htmlspecialchars($row['eventTitle']) . "</a></td>";
+            echo "<td><a href='events/eventDetails.php?eventID=" . htmlspecialchars($row['eventID']) . "'>" . htmlspecialchars($row['eventTitle']) . "</a></td>";
             echo "<td>" . htmlspecialchars($row['eventType']) . "</td>";
             echo "<td>" . $formattedDate . "</td>";
             echo "</tr>";

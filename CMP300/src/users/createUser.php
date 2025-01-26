@@ -3,10 +3,9 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Include database configuration
-include("connection.php");
-include("navigation.php");
-//include("audit.php");
+
+include_once("../connection.php");
+include_once("../navigation.php");  
 
 // Define variables and initialize with empty values
 $username = $password = $firstname = $roleID = $groupID = "";
@@ -83,7 +82,7 @@ mysqli_close($link);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create User</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 
 <body>

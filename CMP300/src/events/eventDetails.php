@@ -1,11 +1,12 @@
 <?php
-// Start session
-session_start();
 
-// Include necessary files
-include_once("connection.php");
-include_once("navigation.php");  // Include navigation bar
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
+
+include_once("../connection.php");
+include_once("../navigation.php");  
 
 
 // Ensure error reporting is enabled for debugging
@@ -40,15 +41,22 @@ if (isset($_GET['eventID'])) {
 
 // RSVP functionality
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['rsvp'])) {
-    // Update number of attendees
-    $query = "UPDATE tbl_events SET numAttendees = numAttendees + 1 WHERE eventID = ?";
-    if ($stmt = mysqli_prepare($link, $query)) {
-        mysqli_stmt_bind_param($stmt, "i", $eventID);
-        if (mysqli_stmt_execute($stmt)) {
-            echo '<p class="success-message">RSVP Updated Successfully!</p>';
-        } else {
-            echo '<p class="fail-message">Error updating attendees.</p>';
+    // Check if user has already RSVP'd in the session
+    if (!isset($_SESSION['rsvp'][$eventID])) {
+        // Update number of attendees
+        $query = "UPDATE tbl_events SET numAttendees = numAttendees + 1 WHERE eventID = ?";
+        if ($stmt = mysqli_prepare($link, $query)) {
+            mysqli_stmt_bind_param($stmt, "i", $eventID);
+            if (mysqli_stmt_execute($stmt)) {
+                echo '<p class="success-message">RSVP Updated Successfully!</p>';
+                // Set session variable to prevent multiple RSVPs
+                $_SESSION['rsvp'][$eventID] = true;
+            } else {
+                echo '<p class="fail-message">Error updating attendees.</p>';
+            }
         }
+    } else {
+        echo '<p class="warning-message">You have already RSVP’d for this event!</p>';
     }
 }
 
@@ -71,7 +79,7 @@ if ($stmt = mysqli_prepare($link, $query)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
     <div class="container mt-5">
@@ -94,8 +102,12 @@ if ($stmt = mysqli_prepare($link, $query)) {
             <a href="downloadFile.php?eventID=<?php echo $eventID; ?>" class="btn btn-success mt-3">Download Event File</a>
         <?php endif; ?>
 
-        <a href="updateEvent.php?eventID=<?php echo $eventID; ?>" class="btn btn-success mt-3">Update Event</a>
-        <a href="cancelEvent.php?eventID=<?php echo $eventID; ?>" class="btn btn-danger mt-3">Cancel Event</a>
+        <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true): ?>
+            <a href="updateEvent.php?eventID=<?php echo $eventID; ?>" class="btn btn-success mt-3">Update Event</a>
+            <a href="cancelEvent.php?eventID=<?php echo $eventID; ?>" class="btn btn-danger mt-3">Cancel Event</a>
+        <?php endif; ?>
+
+
     </div>
 </body>
 </html>

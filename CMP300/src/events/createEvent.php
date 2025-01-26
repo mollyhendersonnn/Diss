@@ -3,10 +3,9 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Include necessary files
-include_once("connection.php");
-include_once("navigation.php");  // Make sure this file contains your navigation bar
-//include("audit.php");
+
+include_once("../connection.php");
+include_once("../navigation.php");  
 
 
 // Check if the user is logged in
@@ -71,9 +70,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Event</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> 
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
      <div class="container mt-5">

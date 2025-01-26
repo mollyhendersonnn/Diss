@@ -5,9 +5,8 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Include database connection
-include_once("connection.php");
-include_once("navigation.php");
+include_once("../connection.php");
+//include_once("../navigation.php");  
 
 // Check if the user is logged in
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {

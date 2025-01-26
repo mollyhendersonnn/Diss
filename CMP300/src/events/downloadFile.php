@@ -1,9 +1,12 @@
 <?php
 // Start session
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-// Include the connection file
-include_once("connection.php");
+
+include_once("../connection.php");
+
 
 // Ensure error reporting is enabled for debugging
 ini_set('display_errors', 1);

@@ -4,9 +4,9 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Include necessary files
-include_once("connection.php");
-include_once("navigation.php");  // Include navigation bar
+
+include_once("../connection.php");
+include_once("../navigation.php");  
 
 
 
@@ -49,7 +49,7 @@ if (isset($_GET['eventID'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
     <div class="container mt-5">

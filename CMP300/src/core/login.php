@@ -4,10 +4,9 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Include database connection
-include_once("connection.php");
-include_once("navigation.php");
-//include_once("audit.php");
+
+include_once("../connection.php");
+include_once("../navigation.php");  
 
 
 
@@ -65,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // logAction($link, $userID, $action);
 
                             // Redirect to the dashboard
-                            header("Location: dashboard.php");
+                            header("Location: ../dashboard.php");
                             exit();
                         } else {
                             $login_err = "Invalid password.";
@@ -98,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
 
 </head>
