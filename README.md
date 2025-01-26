@@ -1,14 +1,11 @@
 Hiya here are some tasks:
 
 
-
+POPUPS
 -update event & archive event (successfull popup - after page navigation)
+-update event back in time (Unsuccesful Popups)
 
--update event back in time (no error)
-
--dropdown in create user for roles etc ()
-
--Archived event (Cancelled? to Status)
+-dropdown in Create user for roles etc ()
 
 -dropdown for Event Type (Create Event - DONE BUT NEEDS PHP)
 
@@ -22,6 +19,8 @@ Hiya here are some tasks:
 -br under Titles (Double check)
 
 -RVSP Successfull (DONE)
+
+-Archived event (Cancelled? - Changed to Outcome) (DONE)
 
 --------------------------------------------------------------------------
 
