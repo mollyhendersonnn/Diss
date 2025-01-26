@@ -43,41 +43,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $eventEnd = $_POST["eventEnd"];
     $userID = $_SESSION["userID"];
     $groupID = $_SESSION["groupID"];
-
-    // Handling file upload
-    $imageContent = $event['eventFile'];
-    if (isset($_FILES["eventFile"]) && $_FILES["eventFile"]["error"] == 0) {
-        $imageContent = file_get_contents($_FILES["eventFile"]["tmp_name"]);
-    }
-
-    // Prepare the SQL query to update the event
-    $query = "UPDATE tbl_events SET eventFile = ?, eventTitle = ?, eventType = ?, eventDescription = ?, eventStart = ?, eventEnd = ? WHERE eventID = ?";
-
-    if ($stmt = mysqli_prepare($link, $query)) {
-        mysqli_stmt_bind_param($stmt, "ssssssi", $imageContent, $eventTitle, $eventType, $eventDescription, $eventStart, $eventEnd, $eventID);
-
-        if (mysqli_stmt_execute($stmt)) {
-            echo "<script>
-            window.location.href = 'dashboard.php';
-            </script>";
-        } 
-        echo '<p class="success-message">Event Updated Successfully!</p>';
-
-           // auditAction($userID, "Updated event with ID: $eventID");
-        //    echo "<script>
-        //    alert('Event updated successfully.');
-        //    window.location.href = 'dashboard.php'; // Redirect after showing the message
-        //  </script>";
-        //     exit;
-        // } else {
-        //     echo json_encode(["success" => false, "message" => "Failed to update event."]);
-        // }
-
-        mysqli_stmt_close($stmt);
+    
+    // Handling Time Validation
+    if (strtotime(datetime: $eventEnd) <= strtotime($eventStart)) {
+    echo '<p class="fail-message">End Date or Time in Past</p>';
     } else {
-        echo json_encode(["success" => false, "message" => "Database query preparation failed."]);
+        $query = "UPDATE tbl_events SET eventFile = ?, eventTitle = ?, eventType = ?, eventDescription = ?, eventStart = ?, eventEnd = ? WHERE eventID = ?";
+       
+        if ($stmt = mysqli_prepare($link, $query)) {
+        mysqli_stmt_bind_param($stmt, "ssssssi", $imageContent, $eventTitle, $eventType, $eventDescription, $eventStart, $eventEnd, $eventID);       
+       
+        if (mysqli_stmt_execute($stmt)) {
+            echo '<p class="success-message">Event Updated Successfully!</p>';
+
+            // Re-Direct 
+            // if (ob_get_length()) { 
+            //     ob_flush(); // Flush output buffer
+            // }
+            // flush(); // Send output to browser immediately
+            // sleep(2);
+            // header("Location: ../dashboard.php");
+
+        } else {
+            echo "<p>Error executing query: " . mysqli_error($link) . "</p>";  // Show SQL error
+        }
+        mysqli_stmt_close($stmt);
     }
-} else {
+}
+}
+
     // Display the form if the request method is not POST
     ?>
     <!DOCTYPE html>
@@ -100,11 +94,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
                 <div class="mb-3">
                     <label for="eventType" class="form-label">Event Type</label>
-                    <select type="text" class="form-control w-50" id="dropdown" value="" name="dropdown" required="">
-                    <option value="" selected="" disabled="">Select an Event Type</option>
-                    <option value="option1">Lunch & Learns</option>
-                    <option value="option2">Town Halls</option>
-                    <option value="option3">Holiday Party</option>
+                    <select type="text" class="form-control w-50" id="eventType" value="" name="eventType" required="">
+                    <option value="" selected="" disabled="">Select an Event Type</option>  
+                    <option value="Lunch and Learns">Lunch & Learns</option>
+                    <option value="Town Halls">Town Halls</option>
+                    <option value="Holiday Party">Holiday Party</option>
                     </select>
                 </div>
                 <div class="mb-3">
@@ -129,5 +123,4 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </body>
     </html>
     <?php
-}
 ?>
