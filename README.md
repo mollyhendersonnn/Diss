@@ -2,7 +2,7 @@ Hiya here are some tasks:
 
 -RVSP Successfull (keep consistent)
 
--update event (successfull popup - keep consistent)
+-update event & archive event (successfull popup - after page navigation)
 
 -update event back in time (no error)
 
