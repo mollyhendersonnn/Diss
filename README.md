@@ -2,18 +2,30 @@ Hiya here are some tasks:
 
 
 POPUPS
--update event & archive event (successfull popup - after page navigation)
-
--update event back in time (Unsuccesful Popups)
+-update event & archive event (NAGIVATION)
 
 -dropdown in Create user for roles etc ()
 
--dropdown for Event Type (Create Event - DONE BUT NEEDS PHP)
+- Cancel Event  Redication & Notification (Manage Events / Archive Events)
 
--not logged in > edit event > remove all button
+- Downloading attachment
+
+- Visible to edit (so user can remove)
+
+- Load Event Type when Editing Event
+
+- Create Event  vs Update EVent ('Select an Event Type' vs Preloaded from DB)
+
+- 
 
 
 --------------------------------------------------------------------------
+-not logged in > edit event > remove all button
+
+-dropdown for Event Type (DONE)
+
+-update event back in time (DONE)
+
 -Arrows in calendar to sandwhich the date (DONE)
 
 -Login container to input fields smaller (DONE)
