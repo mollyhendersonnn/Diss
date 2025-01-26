@@ -4,6 +4,8 @@ Hiya here are some tasks:
 
 -update event (successfull popup - keep consistent)
 
+-update event back in time (no error)
+
 -dropdown for Event Type (Create Event - DONE BUT NEEDS PHP)
 
 -dropdown in create user for roles etc ()
