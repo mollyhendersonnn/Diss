@@ -7,7 +7,7 @@ include("connection.php");
 ?>
 
 <div class="header-banner">
-    <img src="/mollyhenderson/CMP300/src/css/images/Acc_Logo_All_White_RGB.png" alt="Logo" class="logo">
+    <img src="/mollyhenderson/CMP300/src/css/images/Acc_Logo_All_Black_RGB.png" alt="Logo" class="logo">
     <button class="btn btn-secondary mb-3" onclick="history.back()">Back</button>
 </div>
 
@@ -21,9 +21,9 @@ include("connection.php");
         if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && isset($_SESSION["roleID"])) {
             // Show options for Role ID 1
             if ($_SESSION["roleID"] == 1) {
-                echo '<li><a href="/mollyhenderson/CMP300/src/users/createUser.php">USER</a></li>';
+                echo '<li><a href="/mollyhenderson/CMP300/src/users/users.php">USER</a></li>';
                 echo '<li><a href="/mollyhenderson/CMP300/src/audit/audit.php">AUDIT</a></li>';
-                echo '<li><a href="/mollyhenderson/CMP300/src/archive/archive.php">HISTORICAL EVENT</a></li>';
+                echo '<li><a href="/mollyhenderson/CMP300/src/archive/archive.php">HISTORICAL EVENTS</a></li>';
             }
             // Show options for Role ID 2
             elseif ($_SESSION["roleID"] == 2) {

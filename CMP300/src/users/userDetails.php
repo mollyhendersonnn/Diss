@@ -6,19 +6,20 @@ if (session_status() === PHP_SESSION_NONE) {
 include_once("../connection.php");
 include_once("../navigation.php");  
 
+
 // Check if enterpriseID is passed in the URL
 if (isset($_GET['userID'])) {
     $userID = $_GET['userID'];
 
     // Fetch user details based on enterpriseID
-    $query = "SELECT u.enterpriseID, u.firstName, u.groupID, u.roleID, r.roleName, g.groupName
+    $query = "SELECT u.userID, u.enterpriseID, u.firstName, u.groupID, u.roleID, r.roleName, g.groupName
               FROM tbl_users u 
               INNER JOIN tbl_roles r ON u.roleID = r.roleID
-              INNER JOIN tbl_groups g ON u.groupID = g.groupID 
+              INNER JOIN tbl_group g ON u.groupID = g.groupID 
               WHERE u.userID = ?";
 
     if ($stmt = mysqli_prepare($link, $query)) {
-        mysqli_stmt_bind_param($stmt, "s", $userID); // Bind parameter (assuming enterpriseID is a string)
+        mysqli_stmt_bind_param($stmt, "i", $userID); 
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         
@@ -51,7 +52,7 @@ if (isset($_GET['userID'])) {
 </head>
 <body>
     <div class="container mt-5">
-        <h2><?php echo htmlspecialchars($user['userID']); ?></h2>
+        <h2><?php echo htmlspecialchars($user['enterpriseID']); ?></h2>
         <p><strong>First Name:</strong> <?php echo htmlspecialchars($user['firstName']); ?></p>
         <p><strong>Group:</strong> <?php echo htmlspecialchars($groupName); ?></p>
         <p><strong>Role:</strong> <?php echo htmlspecialchars($roleName); ?></p>

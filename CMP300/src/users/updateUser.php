@@ -49,10 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         mysqli_stmt_bind_param($stmt, "siissi", $firstName, $roleID, $groupID, $enterpriseID, $password, $userID);
 
         if (mysqli_stmt_execute($stmt)) {
-            echo "<script>
-            alert('User updated successfully.');
-            window.location.href = 'users.php';
-          </script>";
+            echo '<p class="success-message">User Updated Successfully!</p>';
         } else {
             echo json_encode(["success" => false, "message" => "Failed to update user."]);
         }

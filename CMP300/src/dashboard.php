@@ -9,10 +9,6 @@ include_once("connection.php");
 include_once("navigation.php");
 //include_once("audit.php");
 
-// Enable error reporting for debugging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 ?>
 
 <!DOCTYPE html>
@@ -29,15 +25,6 @@ error_reporting(E_ALL);
 
 <body>
     <?php
-
-// Start the session
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Include database connection
-include_once("connection.php");
-include_once("navigation.php");
 
 // Initialize the result variable
 $result = null;
@@ -79,9 +66,8 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 
     <div class="container mt-5">
         <h2 class="mb-4">Events</h2>
-
         <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true): ?>
-            <a href="createEvent.php" class="btn btn-primary mb-3">Create Event</a>
+            <a href="events/createEvent.php" class="btn btn-primary mb-3">Create Event</a>
         <?php endif; ?>
         <input type="text" id="searchBar" class="form-control mb-3" placeholder="Search for events...">
         <table class="table table-bordered table-striped">
