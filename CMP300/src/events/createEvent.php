@@ -10,7 +10,7 @@ include_once("../navigation.php");
 
 // Check if the user is logged in
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    echo "<p>You must be logged in to create an event.</p>";
+    echo '<p class="fail-message">You must be logged in to create an event.</p>';
     exit;
 }
 
@@ -18,6 +18,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $eventTitle = htmlspecialchars(trim($_POST["eventTitle"]));
     $eventType = $_POST["eventType"];
+    //$eventType = "Event Type goes here";
     $eventDescription = htmlspecialchars(trim($_POST["eventDescription"]));
     $eventStart = $_POST["eventStart"];
     $eventEnd = $_POST["eventEnd"];
@@ -34,7 +35,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     // Prepare the SQL query
-    $query = "INSERT INTO tbl_events (eventFile, userID, groupID, stateID, eventTitle, eventType, eventDescription, eventStart, eventEnd) 
+    if (strtotime(datetime: $eventEnd) <= strtotime($eventStart)) {
+        echo '<p class="fail-message">End Date or Time in Past</p>';
+    } else {
+        $query = "INSERT INTO tbl_events (eventFile, userID, groupID, stateID, eventTitle, eventType, eventDescription, eventStart, eventEnd) 
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     if ($stmt = mysqli_prepare($link, $query)) {
@@ -42,26 +46,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         mysqli_stmt_bind_param($stmt, "siissssss", $imageContent, $userID, $groupID, $stateID, $eventTitle, $eventType, $eventDescription, $eventStart, $eventEnd);
 
         if (mysqli_stmt_execute($stmt)) {
-            // Audit action and success response
-            //auditAction("Created event: $eventTitle");
-            echo "<p>Event created successfully.</p>";
-        } else {
+            echo '<p class="success-message">Event created successfully.</p>"';
+         } else {
             echo "<p>Error executing query: " . mysqli_error($link) . "</p>";  // Show SQL error
+         }
+         mysqli_stmt_close($stmt);
         }
-        mysqli_stmt_close($stmt);
-    } else {
-        echo "<p>Database query preparation failed: " . mysqli_error($link) . "</p>"; // Show database connection error
     }
 }
-?>
 
-<!--to fix php-->
-<?php
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $selected = $_POST['dropdown'];
-    echo "You selected: " . htmlspecialchars($selected);
+   // echo "You selected: " . htmlspecialchars($selected);
 }
-?>
+?> 
 
 
 <!DOCTYPE html>
@@ -84,11 +82,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
                 <div class="mb-3">
                     <label for="eventType" class="form-label">Event Type</label>
-                    <select type="text" class="form-control w-50" id="dropdown" value="" name="dropdown" required="">
+                    <select type="text" class="form-control w-50" id="eventType" value="" name="eventType" required="">
                     <option value="" selected="" disabled="">Select an Event Type</option>
-                    <option value="option1">Lunch & Learns</option>
-                    <option value="option2">Town Halls</option>
-                    <option value="option3">Holiday Party</option>
+                    <option value="Lunch and Learns">Lunch & Learns</option>
+                    <option value="Town Halls">Town Halls</option>
+                    <option value="Holiday Party">Holiday Party</option>
                     </select>
                 </div>
                 <div class="mb-3">

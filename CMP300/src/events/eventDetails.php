@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['rsvp'])) {
             }
         }
     } else {
-        echo '<p class="warning-message">You have already RSVP’d for this event!</p>';
+        echo '<p class="fail-message">You have already RSVP’d for this event!</p>';
     }
 }
 
@@ -84,6 +84,7 @@ if ($stmt = mysqli_prepare($link, $query)) {
 <body>
     <div class="container mt-5">
         <h2><?php echo htmlspecialchars($event['eventTitle']); ?></h2>
+        <br>
         <p><strong>Event Type:</strong> <?php echo htmlspecialchars($event['eventType']); ?></p>
         <p><strong>Description:</strong> <?php echo nl2br(htmlspecialchars($event['eventDescription'])); ?></p>
         <p><strong>Start:</strong> <?php echo htmlspecialchars($event['eventStart']); ?></p>
