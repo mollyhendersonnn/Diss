@@ -54,13 +54,14 @@ if (isset($_GET['eventID'])) {
 <body>
     <div class="container mt-5">
         <h2><?php echo htmlspecialchars($event['eventTitle']); ?></h2>
+        <br>
         <p><strong>Event Type:</strong> <?php echo htmlspecialchars($event['eventType']) ?? ""; ?></p>
         <p><strong>Start:</strong> <?php echo htmlspecialchars($event['eventStart']) ?? ""; ?></p>
         <p><strong>End:</strong> <?php echo htmlspecialchars($event['eventEnd']) ?? ""; ?></p>
         <p><strong>Feedback:</strong> <?php echo htmlspecialchars($event['eventFeedback']) ?? ""; ?></p>
         <p><strong>Cost:</strong> <?php echo htmlspecialchars($event['eventCost']) ?? ""; ?></p>
         <p><strong>Attendees:</strong> <?php echo isset($numAttendees) ? htmlspecialchars($numAttendees) : "0"; ?></p>
-        <p><strong>Cancelled?</strong> <?php 
+        <p><strong>Outcome:</strong> <?php 
                                         if ($event['archiveReason'] == 2) {
                                             echo 'Cancelled';} 
                                         elseif ($event['archiveReason'] == 1) {

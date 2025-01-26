@@ -82,34 +82,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <body>
         <div class="container mt-5">
             <h2>Update Archived Event</h2>
+            <br>
             <form action="updateArchivedEvent.php?eventID=<?php echo $eventID; ?>" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="eventTitle" class="form-label">Event Title</label>
-                    <input type="text" class="form-control" id="eventTitle" name="eventTitle" value="<?php echo htmlspecialchars($event['eventTitle']); ?>" required>
+                    <input type="text" class="form-control w-50" id="eventTitle" name="eventTitle" value="<?php echo htmlspecialchars($event['eventTitle']); ?>" required>
                 </div>
                 <div class="mb-3">
                     <label for="eventType" class="form-label">Event Type</label>
-                    <input type="text" class="form-control" id="eventType" name="eventType" value="<?php echo htmlspecialchars($event['eventType']); ?>" required>
-                </div>
-                <div class="mb-3">
-                    <label for="eventStart" class="form-label">Start Date and Time</label>
-                    <input type="datetime-local" class="form-control" id="eventStart" name="eventStart" value="<?php echo date('Y-m-d\TH:i', strtotime($event['eventStart'])); ?>" required>
-                </div>
-                <div class="mb-3">
-                    <label for="eventEnd" class="form-label">End Date and Time</label>
-                    <input type="datetime-local" class="form-control" id="eventEnd" name="eventEnd" value="<?php echo date('Y-m-d\TH:i', strtotime($event['eventEnd'])); ?>" required>
+                    <input type="text" class="form-control w-50" id="eventType" name="eventType" value="<?php echo htmlspecialchars($event['eventType']); ?>" required>
                 </div>
                 <div class="mb-3">
                     <lebel for="eventFeedback" class="form-label">Event Feedback</lebel>
-                    <input type="text" class="form-control" id="eventFeedback" name="eventFeedback" value="<?php echo htmlspecialchars($event['eventFeedback']); ?>" required>
+                    <input type="text" class="form-control w-50" id="eventFeedback" name="eventFeedback" value="<?php echo htmlspecialchars($event['eventFeedback']); ?>" required>
                 </div>
                 <div class="mb-3">
                     <label for="eventCost" class="form-label">Event Cost</label>
-                    <input type="text" class="form-control" id="eventCost" name="eventCost" value="<?php echo htmlspecialchars($event['eventCost']); ?>" required>
+                    <input type="text" class="form-control w-50" id="eventCost" name="eventCost" value="<?php echo htmlspecialchars($event['eventCost']); ?>" required>
                 </div>
                 <div class="mb-3">
                     <label for="numAttendees" class="form-label">Number of Attendees</label>
-                    <input type="text" class="form-control" id="numAttendees" name="numAttendees" value="<?php echo htmlspecialchars($event['numAttendees']); ?>" required>
+                    <input type="text" class="form-control w-50" id="numAttendees" name="numAttendees" value="<?php echo htmlspecialchars($event['numAttendees']); ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label for="eventStart" class="form-label">Start Date and Time</label>
+                    <input type="datetime-local" class="form-control w-auto" id="eventStart" name="eventStart" value="<?php echo date('Y-m-d\TH:i', strtotime($event['eventStart'])); ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label for="eventEnd" class="form-label">End Date and Time</label>
+                    <input type="datetime-local" class="form-control w-auto" id="eventEnd" name="eventEnd" value="<?php echo date('Y-m-d\TH:i', strtotime($event['eventEnd'])); ?>" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Update Archived Event</button>

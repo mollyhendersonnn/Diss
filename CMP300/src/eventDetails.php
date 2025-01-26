@@ -45,12 +45,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['rsvp'])) {
     if ($stmt = mysqli_prepare($link, $query)) {
         mysqli_stmt_bind_param($stmt, "i", $eventID);
         if (mysqli_stmt_execute($stmt)) {
-            echo "<p>RSVP successful!</p>";
+            echo '<p class="success-message">RSVP Updated Successfully!</p>';
         } else {
-            echo "<p>Error updating attendees.</p>";
+            echo '<p class="fail-message">Error updating attendees.</p>';
         }
     }
 }
+
 
 // Retrieve current number of attendees
 $query = "SELECT numAttendees FROM tbl_events WHERE eventID = ?";

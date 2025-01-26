@@ -58,15 +58,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         mysqli_stmt_bind_param($stmt, "ssssssi", $imageContent, $eventTitle, $eventType, $eventDescription, $eventStart, $eventEnd, $eventID);
 
         if (mysqli_stmt_execute($stmt)) {
+            echo "<script>
+            window.location.href = 'dashboard.php';
+            </script>";
+        } 
+        echo '<p class="success-message">Event Updated Successfully!</p>';
+
            // auditAction($userID, "Updated event with ID: $eventID");
-           echo "<script>
-           alert('Event updated successfully.');
-           window.location.href = 'dashboard.php'; // Redirect after showing the message
-         </script>";
-            exit;
-        } else {
-            echo json_encode(["success" => false, "message" => "Failed to update event."]);
-        }
+        //    echo "<script>
+        //    alert('Event updated successfully.');
+        //    window.location.href = 'dashboard.php'; // Redirect after showing the message
+        //  </script>";
+        //     exit;
+        // } else {
+        //     echo json_encode(["success" => false, "message" => "Failed to update event."]);
+        // }
 
         mysqli_stmt_close($stmt);
     } else {
@@ -87,30 +93,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <body>
         <div class="container mt-5">
             <h2>Update Event</h2>
+            <br>
             <form action="updateEvent.php?eventID=<?php echo $eventID; ?>" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="eventTitle" class="form-label">Event Title</label>
-                    <input type="text" class="form-control" id="eventTitle" name="eventTitle" value="<?php echo htmlspecialchars($event['eventTitle']); ?>" required>
+                    <input type="text" class="form-control w-50" id="eventTitle" name="eventTitle" value="<?php echo htmlspecialchars($event['eventTitle']); ?>" required>
                 </div>
                 <div class="mb-3">
                     <label for="eventType" class="form-label">Event Type</label>
-                    <input type="text" class="form-control" id="eventType" name="eventType" value="<?php echo htmlspecialchars($event['eventType']); ?>" required>
+                    <input type="text" class="form-control w-50" id="eventType" name="eventType" value="<?php echo htmlspecialchars($event['eventType']); ?>" required>
                 </div>
                 <div class="mb-3">
                     <label for="eventDescription" class="form-label">Event Description</label>
-                    <textarea class="form-control" id="eventDescription" name="eventDescription" rows="3" required><?php echo htmlspecialchars($event['eventDescription']); ?></textarea>
+                    <textarea class="form-control w-50" id="eventDescription" name="eventDescription" rows="3" required><?php echo htmlspecialchars($event['eventDescription']); ?></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="eventStart" class="form-label">Start Date and Time</label>
-                    <input type="datetime-local" class="form-control" id="eventStart" name="eventStart" value="<?php echo date('Y-m-d\TH:i', strtotime($event['eventStart'])); ?>" required>
+                    <input type="datetime-local" class="form-control w-auto" id="eventStart" name="eventStart" value="<?php echo date('Y-m-d\TH:i', strtotime($event['eventStart'])); ?>" required>
                 </div>
                 <div class="mb-3">
                     <label for="eventEnd" class="form-label">End Date and Time</label>
-                    <input type="datetime-local" class="form-control" id="eventEnd" name="eventEnd" value="<?php echo date('Y-m-d\TH:i', strtotime($event['eventEnd'])); ?>" required>
+                    <input type="datetime-local" class="form-control w-auto" id="eventEnd" name="eventEnd" value="<?php echo date('Y-m-d\TH:i', strtotime($event['eventEnd'])); ?>" required>
                 </div>
                 <div class="mb-3">
                     <label for="eventFile" class="form-label">Event File</label>
-                    <input type="file" class="form-control" id="eventFile" name="eventFile">
+                    <input type="file" class="form-control w-50" id="eventFile" name="eventFile">
                 </div>
                 <button type="submit" class="btn btn-primary">Update Event</button>
             </form>
