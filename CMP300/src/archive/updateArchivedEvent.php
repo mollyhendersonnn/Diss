@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Handling Time Validation
     if (strtotime(datetime: $eventEnd) <= strtotime($eventStart)) {
-        echo '<p class="fail-message">End Date or Time in Past</p>';
+        echo '<p class="alert alert-danger">End Date or Time in Past</p>';
         } else {
             $query= "UPDATE tbl_archive SET eventTitle = ? , eventType = ? , eventStart = ? , eventEnd = ? , eventFeedback = ? , eventCost = ? , numAttendees = ?  WHERE eventID = ?";
            

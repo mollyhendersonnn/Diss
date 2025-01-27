@@ -9,11 +9,14 @@ include_once("connection.php");
 include_once("navigation.php");
 //include_once("audit.php");
 
+//header(header: "Refresh:3");
+
 if (!empty($_SESSION['success_message'])) {
     echo "<p class='alert alert-success'>" . $_SESSION['success_message'] . "</p>";
     unset($_SESSION['success_message']); // Clear the message after displaying
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -65,14 +68,11 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     }
 }
 ?>
-
-    
-
     <div class="container mt-5">
         <h2 class="mb-4">Events</h2>
         <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true): ?>
             <a href="events/createEvent.php" class="btn btn-primary mb-3">Create Event</a>
-        <?php endif; ?>
+            <?php endif; ?>
         <input type="text" id="searchBar" class="form-control mb-3" placeholder="Search for events...">
         <table class="table table-bordered table-striped">
         <thead class="thead-dark">
@@ -113,7 +113,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         INSERT INTO `tbl_archive` (`eventID`, `stateID`, `groupID`, `userID`, `eventTitle`, `eventType`, `eventStart`, `eventEnd`, `numAttendees`)
         SELECT eventID, stateID, groupID, userID, eventTitle, eventType, eventStart, eventEnd, numAttendees
         FROM tbl_events
-        WHERE eventEnd < ? AND stateID = 2";
+        WHERE eventEnd < ?";
     
     
         if ($stmt = mysqli_prepare($link, $sql)) {
@@ -127,7 +127,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         }
     
         // Delete the archived events from tbl_events
-        $deleteQuery = "DELETE FROM tbl_events WHERE eventEnd < ? AND stateID = 2";
+        $deleteQuery = "DELETE FROM tbl_events WHERE eventEnd < ?";
     
         if ($stmt = mysqli_prepare($link, $deleteQuery)) {
             mysqli_stmt_bind_param($stmt, "s", $currentDate);

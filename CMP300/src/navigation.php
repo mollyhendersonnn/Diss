@@ -8,7 +8,6 @@ include("connection.php");
 
 <div class="header-banner">
     <img src="/mollyhenderson/CMP300/src/css/images/Acc_Logo_All_Black_RGB.png" alt="Logo" class="logo">
-    <button class="btn btn-secondary mb-3" onclick="history.back()">Back</button>
 </div>
 
 
@@ -37,4 +36,5 @@ include("connection.php");
         }
         ?>
     </ul>
+    <button class='btn btn-secondary mb-3 style="right: 30px;' onclick="history.back()">Back</button>
 </div> 
