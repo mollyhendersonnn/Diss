@@ -2,8 +2,6 @@ Hiya here are some tasks:
 
 - Change Back button to Black font
 
-- Redication (Cancel Event / Manage Events / Archive Events)
-
 - Downloading attachment / Visible to edit (so user can remove)
 
 - Load Event Type when Editing Event (Preloaded from DB)
@@ -23,6 +21,8 @@ Hiya here are some tasks:
   
 
 --------------------------------------------------------------------------
+- Redication (Cancel Event / Manage Events / Archive Events)
+
 -dropdown in Create user for roles etc ()
 
 -not logged in > edit event > remove all button
