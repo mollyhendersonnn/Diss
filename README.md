@@ -4,22 +4,18 @@ Hiya here are some tasks:
 POPUPS
 -update event & archive event (NAGIVATION)
 
--dropdown in Create user for roles etc ()
+- Cancel Event  Redication (Manage Events / Archive Events)
 
-- Cancel Event  Redication & Notification (Manage Events / Archive Events)
+- Downloading attachment / Visible to edit (so user can remove)
 
-- Downloading attachment
+- Load Event Type when Editing Event (Preloaded from DB)
 
-- Visible to edit (so user can remove)
-
-- Load Event Type when Editing Event
-
-- Create Event  vs Update EVent ('Select an Event Type' vs Preloaded from DB)
-
-- 
+- Notifications**
 
 
 --------------------------------------------------------------------------
+-dropdown in Create user for roles etc ()
+
 -not logged in > edit event > remove all button
 
 -dropdown for Event Type (DONE)
