@@ -4,7 +4,7 @@ Hiya here are some tasks:
 
 - Change Back button to Black font to image
 
-- Downloading attachment / Visible to edit (so user can remove)
+
 
 - Load Event Type when Editing Event (Preloaded from DB)
 
@@ -33,6 +33,8 @@ Hiya here are some tasks:
 
 --------------------------------------------------------------------------
 - rsvp notificastion (DONE)
+
+- - Downloading attachment / Visible to edit (so user can remove) (DONE)
     
 - Redication (Cancel Event / Manage Events / Archive Events)
 
