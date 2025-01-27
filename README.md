@@ -8,8 +8,6 @@ Hiya here are some tasks:
 
 - Load Event Type when Editing Event (Preloaded from DB)
 
-- Notifications** (Remove Bold)
-
 - calendar
   Border shadow remove (Done)
   
@@ -23,7 +21,7 @@ Hiya here are some tasks:
   
 
 --------------------------------------------------------------------------
-- rsvp notificastion
+- rsvp notificastion (DONE)
     
 - Redication (Cancel Event / Manage Events / Archive Events)
 
