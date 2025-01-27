@@ -48,16 +48,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['rsvp'])) {
         if ($stmt = mysqli_prepare($link, $query)) {
             mysqli_stmt_bind_param($stmt, "i", $eventID);
             if (mysqli_stmt_execute($stmt)) {
-               // echo '<p class="success-message">RSVP Updated Successfully!</p>';
-                echo '<p class="alert alert-success">RSVP Updated Successfully!</p>';
+                echo '<p class="success-message">RSVP Updated Successfully!</p>';
                 // Set session variable to prevent multiple RSVPs
                 $_SESSION['rsvp'][$eventID] = true;
             } else {
-                echo '<p class="alert alert-danger">Error updating attendees.</p>';
+                echo '<p class="fail-message">Error updating attendees.</p>';
             }
         }
     } else {
-        echo '<p class="alert alert-danger">You have already RSVP’d for this event!</p>';
+        echo '<p class="fail-message">You have already RSVP’d for this event!</p>';
     }
 }
 
