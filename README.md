@@ -1,6 +1,6 @@
 Hiya here are some tasks:
 
-- rsvp notificastion
+
 
 - Change Back button to Black font
 
@@ -23,6 +23,8 @@ Hiya here are some tasks:
   
 
 --------------------------------------------------------------------------
+- rsvp notificastion
+    
 - Redication (Cancel Event / Manage Events / Archive Events)
 
 -dropdown in Create user for roles etc ()
