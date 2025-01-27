@@ -8,16 +8,27 @@ Hiya here are some tasks:
 
 - Load Event Type when Editing Event (Preloaded from DB)
 
+
 - calendar
   Border shadow remove (Done)
   
   Text (smaller and bold) (Done)
   
-  Fixed border
+  Change grey background (DONE)
   
-  Change grey background
+  thicker lines (DONE)
+
+  Number in the top left corner
+
+  events as numbers ideally
+
+  Fixed cell size and fixed container
+
   
-  thicker lines
+
+  
+
+  
   
 
 --------------------------------------------------------------------------
