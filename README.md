@@ -1,10 +1,7 @@
 Hiya here are some tasks:
 
 
-POPUPS
--update event & archive event (NAGIVATION)
-
-- Cancel Event  Redication (Manage Events / Archive Events)
+- Redication (Cancel Event / Manage Events / Archive Events)
 
 - Downloading attachment / Visible to edit (so user can remove)
 
