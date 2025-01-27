@@ -9,6 +9,7 @@
     --accent-purple5: #e6dcff;
     --accent-purple6: #f5f1ff;
     --black: #000000;
+    --black-lighter: #00000061;
     --dark-grey: #96968c;
     --light-grey: #e6e6dc;
     --white: #ffffff;
@@ -129,18 +130,19 @@ body {
   }
 
 button, .btn{
-    background-color: var(--core-purple1) !important;
-    color: var(--white) !important;
+    background-color: var(--accent-purple3) !important;
+    color: var(--black) !important;
     border: none !important;
     border-radius: 4px !important;
     padding: 8px 15px !important;
     font-size: 14px !important;
     cursor: pointer !important;
-    transition: background-color 0.3s !important;       
+    transition: background-color 0.3s !important;   
 }
 
 button:hover, .btn:hover {
-    background-color: var(--core-purple2) !important;
+    background-color: var(--core-purple1) !important;
+    color: var(--white) !important;
 }
 
 /* Calendar Table */
@@ -149,7 +151,6 @@ button:hover, .btn:hover {
     padding: 20px;
     margin-top: 15px;
     border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 #monthAndYear {
@@ -165,21 +166,21 @@ button:hover, .btn:hover {
     background-color: var(--white);
     border: 1px solid var(--dark-grey);
     margin: 0 auto; /* Center the calendar on the page */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add some depth for visual appeal */
 }
 
 .table-calendar th,
 .table-calendar td {
-    border: 1px solid var(--dark-grey);
+    border: 1px solid var(--black-lighter);
     text-align: center;
     padding: 20px; /* Increase padding for larger cells */
-    font-size: 16px; /* Slightly larger text for readability */
+    font-size: 12px; /* Slightly larger text for readability */
     color: var(--black);
     height: 80px; /* Make each cell taller */
+    font-weight: bold;
 }
 
 .table-calendar th {
-    background-color: var(--light-grey);
+    background-color: var(--accent-purple3);
     font-weight: bold;
     font-size: 18px; /* Slightly larger text for headers */
 }

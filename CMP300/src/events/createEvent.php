@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Prepare the SQL query
     if (strtotime(datetime: $eventEnd) <= strtotime($eventStart)) {
-        echo '<p class="fail-message">End Date or Time in Past</p>';
+        echo '<p class="alert alert-danger">End Date or Time in Past</p>';
     } else {
         $query = "INSERT INTO tbl_events (eventFile, userID, groupID, stateID, eventTitle, eventType, eventDescription, eventStart, eventEnd) 
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if (mysqli_stmt_execute($stmt)) {
             $_SESSION['success_message'] = "Event Updated Successfully!";
-            header("Location: ../dashboard.php");
+            header(header: "Location: ../dashboard.php");
             exit();
             // echo '<p class="success-message">Event created successfully.</p>"';
          } else {
