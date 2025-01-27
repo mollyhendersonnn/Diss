@@ -11,9 +11,13 @@ Hiya here are some tasks:
 
 - calendar
   Border shadow remove (Done)
+  
   Text (smaller and bold) (Done)
+  
   Fixed border
+  
   Change grey background
+  
   thicker lines
   
 
