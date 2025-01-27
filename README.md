@@ -9,7 +9,13 @@ Hiya here are some tasks:
 
 - Notifications**
 
--calendar
+- calendar
+  Border shadow remove (Done)
+  Text (smaller and bold) (Done)
+  Fixed border
+  Change grey background
+  thicker lines
+  
 
 --------------------------------------------------------------------------
 -dropdown in Create user for roles etc ()
