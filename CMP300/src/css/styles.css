@@ -96,28 +96,6 @@ body {
     color: var(--white);
 }
 
-.success-message {
-    color: #00a500;
-    font-size: 18px;
-    font-weight: lighter;
-    background-color: #e0f8e0; /* Light green background for contrast */
-    padding: 10px;
-    border: 1px solid #ffffff;
-    border-radius: 5px;
-    text-align: center;
-  }
-
-  .fail-message {
-    color: #000000;
-    font-size: 18px;
-    font-weight: lighter;
-    background-color: #ffbed6; /* Light green background for contrast */
-    padding: 10px;
-    border: 1px solid #ffffff;
-    border-radius: 5px;
-    text-align: center;
-  }
-
   .corner-alert {
     position: fixed; /* Fix the position relative to the viewport */
     top: -5%; /* Distance from the top */

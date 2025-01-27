@@ -52,18 +52,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
        
         if ($stmt = mysqli_prepare($link, $query)) {
         mysqli_stmt_bind_param($stmt, "ssssssi", $imageContent, $eventTitle, $eventType, $eventDescription, $eventStart, $eventEnd, $eventID);       
-       
         if (mysqli_stmt_execute($stmt)) {
-            echo '<p class="success-message">Event Updated Successfully!</p>';
-
-            // Re-Direct 
-            // if (ob_get_length()) { 
-            //     ob_flush(); // Flush output buffer
-            // }
-            // flush(); // Send output to browser immediately
-            // sleep(2);
-            // header("Location: ../dashboard.php");
-
+            $_SESSION['success_message'] = "Event Updated Successfully!";
+            header("Location: ../dashboard.php");
+            exit();
         } else {
             echo "<p>Error executing query: " . mysqli_error($link) . "</p>";  // Show SQL error
         }
@@ -122,5 +114,3 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
     </body>
     </html>
-    <?php
-?>

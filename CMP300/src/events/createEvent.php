@@ -46,7 +46,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         mysqli_stmt_bind_param($stmt, "siissssss", $imageContent, $userID, $groupID, $stateID, $eventTitle, $eventType, $eventDescription, $eventStart, $eventEnd);
 
         if (mysqli_stmt_execute($stmt)) {
-            echo '<p class="success-message">Event created successfully.</p>"';
+            $_SESSION['success_message'] = "Event Updated Successfully!";
+            header("Location: ../dashboard.php");
+            exit();
+            // echo '<p class="success-message">Event created successfully.</p>"';
          } else {
             echo "<p>Error executing query: " . mysqli_error($link) . "</p>";  // Show SQL error
          }

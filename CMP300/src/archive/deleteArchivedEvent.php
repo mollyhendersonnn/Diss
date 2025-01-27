@@ -29,7 +29,9 @@ if ($stmt = mysqli_prepare($link, $query)) {
 
     if (mysqli_stmt_execute($stmt)) {
         if (mysqli_stmt_affected_rows($stmt) > 0) {
-            echo json_encode(["success" => true, "message" => "Archived event deleted successfully."]);
+           $_SESSION['success_message'] = "Archive Event Deleted Successfully!";
+           header("Location: archive.php");
+           exit();
         } else {
             echo json_encode(["success" => false, "message" => "Event not found or already deleted."]);
         }

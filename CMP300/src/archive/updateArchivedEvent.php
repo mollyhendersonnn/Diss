@@ -58,16 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 mysqli_stmt_bind_param($stmt, "sssssssi", $eventTitle, $eventType, $eventStart, $eventEnd, $eventFeedback, $eventCost, $numAttendees, $eventID);
                
                 if (mysqli_stmt_execute($stmt)) {
-                    echo '<p class="success-message">Event Updated Successfully!</p>';
-                   
-                    // Re-Direct 
-                    // if (ob_get_length()) { 
-                    //     ob_flush(); // Flush output buffer
-                    // }
-                    // flush(); // Send output to browser immediately
-                    // sleep(2);
-                    // header("Location: archive.php");
-                    
+                   $_SESSION['success_message'] = "Archive Event Updated Successfully!";
+                   header("Location: archive.php");
+                   exit();
                 } else {
                     echo json_encode(["success" => false, "message" => "Failed to update archived event."]);
                 }
@@ -75,46 +68,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
         }
     }
-
-    //         if ($stmt = mysqli_prepare($link, $query)) {
-    //         mysqli_stmt_bind_param($stmt, "ssssssi", $imageContent, $eventTitle, $eventType, $eventDescription, $eventStart, $eventEnd, $eventID);       
-           
-    //         if (mysqli_stmt_execute($stmt)) {
-    //             echo '<p class="success-message">Event Updated Successfully!</p>';
-    //             sleep(2);
-    //             header("Location: ../dashboard.php");
-    //             exit();
-    //         } else {
-    //             echo "<p>Error executing query: " . mysqli_error($link) . "</p>";  // Show SQL error
-    //         }
-    //         mysqli_stmt_close($stmt);
-    //     }
-    // }
-    // }
-
-
-
-
-    // // Prepare the SQL query to update the archived event
-    // $query= "UPDATE tbl_archive SET eventTitle = ? , eventType = ? , eventStart = ? , eventEnd = ? , eventFeedback = ? , eventCost = ? , numAttendees = ?  WHERE eventID = ?";
-
-    // if ($stmt = mysqli_prepare($link, $query)) {
-    //     mysqli_stmt_bind_param($stmt, "sssssssi", $eventTitle, $eventType, $eventStart, $eventEnd, $eventFeedback, $eventCost, $numAttendees, $eventID);
-
-    //     if (mysqli_stmt_execute($stmt)) {
-    //         //auditAction($userID, "Updated archived event with ID: $eventID");
-    //         echo "<script>
-    //         alert('Event updated successfully.');
-    //         window.location.href = 'archive.php';
-    //       </script>";
-    //     } else {
-    //         echo json_encode(["success" => false, "message" => "Failed to update archived event."]);
-    //     }
-
-    //     mysqli_stmt_close($stmt);
-    // } else {
-    //     echo json_encode(["success" => false, "message" => "Database query preparation failed."]);
-    // }
 
     // Display the form if the request method is not POST
     ?>

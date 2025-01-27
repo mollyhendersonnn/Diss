@@ -9,6 +9,10 @@ include_once("connection.php");
 include_once("navigation.php");
 //include_once("audit.php");
 
+if (!empty($_SESSION['success_message'])) {
+    echo "<p class='alert alert-success'>" . $_SESSION['success_message'] . "</p>";
+    unset($_SESSION['success_message']); // Clear the message after displaying
+}
 ?>
 
 <!DOCTYPE html>
