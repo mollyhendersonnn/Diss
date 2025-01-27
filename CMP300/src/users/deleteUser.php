@@ -28,7 +28,9 @@ if ($stmt = mysqli_prepare($link, $query)) {
 
     if (mysqli_stmt_execute($stmt)) {
         if (mysqli_stmt_affected_rows($stmt) > 0) {
-            echo json_encode(["success" => true, "message" => "User deleted successfully."]);
+            $_SESSION['success_message'] = "User Created Successfully!";
+            header("Location: users.php");
+            exit();
         } else {
             echo json_encode(["success" => false, "message" => "User not found or already deleted."]);
         }

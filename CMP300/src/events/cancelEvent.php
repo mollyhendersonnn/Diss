@@ -55,7 +55,10 @@ if ($stmt = mysqli_prepare($link, $query)) {
         if ($deleteStmt = mysqli_prepare($link, $deleteQuery)) {
             mysqli_stmt_bind_param($deleteStmt, "i", $eventID);
             if (mysqli_stmt_execute($deleteStmt)) {
-                echo json_encode(["success" => true, "message" => "Event archived and deleted successfully."]);
+                $_SESSION['success_message'] = "Event Archived and Deleted Successfully!";
+                header("Location: ../dashboard.php");
+                exit();
+            //   echo json_encode(["success" => true, "message" => "Event archived and deleted successfully."]);
             } else {
                 echo json_encode(["success" => false, "message" => "Failed to delete the event."]);
             }

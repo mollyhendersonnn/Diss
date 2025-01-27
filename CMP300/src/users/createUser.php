@@ -12,6 +12,26 @@ $username = $password = $firstname = $roleID = $groupID = "";
 $username_err = $password_err = $firstname_err = $roleID_err = $groupID_err = "";
 
 
+// Query to fetch roles from the database
+$sql_roles = "SELECT roleID, roleName FROM tbl_roles"; // Adjust "roles" to your actual table name
+$result_roles = mysqli_query($link, $sql_roles);
+
+if ($result_roles) {
+    $tbl_roles = mysqli_fetch_all($result_roles, MYSQLI_ASSOC); // Fetch all roles
+} else {
+    echo "Error fetching roles: " . mysqli_error($link);
+}
+
+// Query to fetch Groups from the database
+$sql_group = "SELECT groupID, groupName FROM tbl_group"; // Adjust "roles" to your actual table name
+$result_group = mysqli_query($link, $sql_group);
+
+if ($result_group) {
+    $tbl_group = mysqli_fetch_all($result_group, MYSQLI_ASSOC); // Fetch all roles
+} else {
+    echo "Error fetching roles: " . mysqli_error($link);
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Sanitize inputs
     $username = isset($_POST["username"]) ? trim($_POST["username"]) : "";
@@ -49,9 +69,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         mysqli_stmt_bind_param($stmt_insert, "iisss", $roleID, $groupID, $username, $hashed_password, $firstname);
 
                         if (mysqli_stmt_execute($stmt_insert)) {
-                            echo "<div class='alert alert-success'>User created successfully!</div>";
-                            //Audit log
-                           // auditAction($userID, "User created user: $username");
+                            $_SESSION['success_message'] = "User Created Successfully!";
+                            header("Location: users.php");
+                            exit();
                         } else {
                             echo "<div class='alert alert-danger'>Error: " . mysqli_stmt_error($stmt_insert) . "</div>";
                         }
@@ -71,7 +91,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Close database connection
 mysqli_close($link);
-
 ?>
 
 <!DOCTYPE html>
@@ -107,20 +126,32 @@ mysqli_close($link);
                     value="<?php echo $firstname; ?>">
                 <span class="invalid-feedback"><?php echo $firstname_err; ?></span>
             </div>
+             <div class="form-group">
+    <label for="roleID">Role ID</label>
+    <select id="roleID" name="roleID" class="form-control w-50 <?php echo (!empty($roleID_err)) ? 'is-invalid' : ''; ?>">
+        <option value="">Select a Role</option>
+        <?php
+        // Dynamically populate dropdown with roles
+        foreach ($tbl_roles as $role) {
+            echo '<option value="' . $role['roleID'] . '">' . htmlspecialchars($role['roleName']) . '</option>';
+        }
+        ?>
+    </select>
+    <span class="invalid-feedback"><?php echo $roleID_err; ?></span>
+</div>
             <div class="form-group">
-                <label for="roleID">Role ID</label>
-                <input type="number" id="roleID" name="roleID"
-                    class="form-control w-50 <?php echo (!empty($roleID_err)) ? 'is-invalid' : ''; ?>"
-                    value="<?php echo $roleID; ?>">
-                <span class="invalid-feedback"><?php echo $roleID_err; ?></span>
-            </div>
-            <div class="form-group">
-                <label for="groupID">Group ID</label>
-                <input type="number" id="groupID" name="groupID"
-                    class="form-control w-50 <?php echo (!empty($groupID_err)) ? 'is-invalid' : ''; ?>"
-                    value="<?php echo $groupID; ?>">
-                <span class="invalid-feedback"><?php echo $groupID_err; ?></span>
-            </div>
+    <label for="groupID">Group ID</label>
+    <select id="groupID" name="groupID" class="form-control w-50 <?php echo (!empty($groupID_err)) ? 'is-invalid' : ''; ?>">
+        <option value="">Select a Group</option>
+        <?php
+        // Dynamically populate dropdown with groups
+        foreach ($tbl_group as $group) {
+            echo '<option value="' . $group['groupID'] . '">' . htmlspecialchars($group['groupName']) . '</option>';
+        }
+        ?>
+    </select>
+    <span class="invalid-feedback"><?php echo $groupID_err; ?></span>
+</div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Create User</button>
             </div>
