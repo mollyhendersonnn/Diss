@@ -8,7 +8,7 @@ Hiya here are some tasks:
 
 - Load Event Type when Editing Event (Preloaded from DB)
 
-- Notifications**
+- Notifications** (Remove Bold)
 
 - calendar
   Border shadow remove (Done)
