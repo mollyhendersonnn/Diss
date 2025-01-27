@@ -12,6 +12,7 @@ POPUPS
 
 - Notifications**
 
+-calendar
 
 --------------------------------------------------------------------------
 -dropdown in Create user for roles etc ()
