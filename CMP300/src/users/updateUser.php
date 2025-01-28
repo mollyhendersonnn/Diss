@@ -79,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <br>
             <form action="updateUser.php?userID=<?php echo $userID; ?>" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
-                    <label for="firstName" class="form-label">First Name</label>
+                    <label for="firstName" class="form-label">Name</label>
                     <input type="text" class="form-control w-50" id="firstName" name="firstName" value="<?php echo htmlspecialchars($user['firstName']); ?>" required>
                 </div>
                 <div class="mb-3">

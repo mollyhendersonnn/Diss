@@ -4,14 +4,10 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-
+// Include database connection and navigation
 include_once("../connection.php");
-include_once("../navigation.php");  
+include_once("../navigation.php");
 
-// Enable error reporting for debugging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +17,7 @@ error_reporting(E_ALL);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historical Events</title>
+    <title>User Audit</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -30,8 +26,8 @@ error_reporting(E_ALL);
     <?php
     // Check if the user is logged in and session variables exist
     if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-        // Correct the query syntax
-        $query = "SELECT * FROM tbl_archive";
+        // Query to fetch audit data
+        $query = "SELECT userID, action, timestamp FROM tbl_audit ORDER BY timestamp DESC";
         if ($stmt = mysqli_prepare($link, $query)) {
             // Execute the query
             mysqli_stmt_execute($stmt);
@@ -40,51 +36,52 @@ error_reporting(E_ALL);
             die("Database query preparation failed: " . mysqli_error($link));
         }
     }
+
+    // Function to delete expired audit entries (older than 12 months)
+    function deleteExpiredAuditEntries($link) {
+        $twelveMonthsAgo = date("Y-m-d H:i:s", strtotime("-12 months"));
+
+        // SQL query to delete expired audit entries
+        $query = "DELETE FROM tbl_audit WHERE timestamp < ?";
+        if ($stmt = mysqli_prepare($link, $query)) {
+            mysqli_stmt_bind_param($stmt, "s", $twelveMonthsAgo);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+        } else {
+            echo "Database query preparation failed: " . mysqli_error($link);
+        }
+    }
+
+    // Call the function to delete expired audit entries
+    deleteExpiredAuditEntries($link);
     ?>
 
     <div class="container mt-5">
-        <h2 class="mb-4">Events</h2>
-        <input type="text" id="searchBar" class="form-control mb-3" placeholder="Search for events...">
+        <h2 class="mb-4">User Audit</h2>
+        <input type="text" id="searchBar" class="form-control mb-3" placeholder="Search for actions...">
         <table class="table table-bordered table-striped">
             <thead class="thead-dark">
                 <tr>
                     <!-- Define static column headers -->
-                    <th>Event Title</th>
-                    <th>Event Type</th>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Time</th>
                 </tr>
             </thead>
-            <tbody id="eventTableBody">
+            <tbody id="auditTableBody">
                 <?php
-                // Display only the required columns
+                // Display the fetched audit data
                 if ($result && mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo "<tr>";
-                        echo "<td><a href='archiveEventDetails.php?eventID=" . htmlspecialchars($row['eventID']) . "'>" . htmlspecialchars($row['eventTitle']) . "</a></td>";
-                        echo "<td>" . htmlspecialchars($row['eventType']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['userID']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['action']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['timestamp']) . "</td>";
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='2'>No results found.</td></tr>";
+                    echo "<tr><td colspan='3'>No audit records found.</td></tr>";
                 }
-
-                // Function to delete expired events
-                function deleteExpiredEvents($link) {
-                    $currentDate = date("Y-m-d H:i:s");
-                    $twelveMonthsAgo = date("Y-m-d H:i:s", strtotime("-12 months"));
-
-                    // Prepare the SQL query to delete events
-                    $query = "DELETE FROM tbl_archive WHERE eventEnd < ?";
-                    if ($stmt = mysqli_prepare($link, $query)) {
-                        mysqli_stmt_bind_param($stmt, "s", $twelveMonthsAgo);
-                        mysqli_stmt_execute($stmt); // Execute the deletion query
-                        mysqli_stmt_close($stmt);
-                    } else {
-                        echo "Database query preparation failed: " . mysqli_error($link);
-                    }
-                }
-
-                // Call the function to update event states
-                deleteExpiredEvents($link);
                 ?>
             </tbody>
         </table>
@@ -95,7 +92,7 @@ error_reporting(E_ALL);
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const searchBar = document.getElementById('searchBar');
-        const tableBody = document.getElementById('eventTableBody');
+        const tableBody = document.getElementById('auditTableBody');
         const rows = tableBody.getElementsByTagName('tr');
 
         searchBar.addEventListener('keyup', function () {

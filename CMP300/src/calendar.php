@@ -21,9 +21,33 @@ while ($row = mysqli_fetch_assoc($result)) {
     ];
 }
 
+// Fetch UK holidays using an API
+$year = date("Y");
+$holidaysApiUrl = "https://www.gov.uk/bank-holidays.json";
+$holidays = [];
+
+try {
+    $response = file_get_contents($holidaysApiUrl);
+    $data = json_decode($response, true);
+
+    foreach ($data['england']['events'] as $holiday) {
+        $holidays[] = [
+            "title" => $holiday['title'],
+            "start" => $holiday['date'],
+            "end" => $holiday['date'], // Single-day event
+        ];
+    }
+} catch (Exception $e) {
+    error_log("Error fetching holidays: " . $e->getMessage());
+}
+
+// Merge holidays with database events
+$allEvents = array_merge($events, $holidays);
+
 // Pass events to JavaScript as a JSON object
-echo "<script>const dbEvents = " . json_encode($events, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ";</script>";
+echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ";</script>";
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,11 +70,7 @@ echo "<script>const dbEvents = " . json_encode($events, JSON_HEX_TAG | JSON_HEX_
         <h3 id="monthAndYear"></h3>
         <button id="next" aria-label="Next Month" onclick="next()">›</button>
         </div>
-
-            <!-- <button id="previous" onclick="previous()">‹</button> <h3 id="monthAndYear"></h3> <button id="next" onclick="next()">›</button>
-   -->
-            <!-- create event button might go here -->
-        </div>
+    </div>
         <br>
         <table class="table-calendar" id="calendar" data-lang="en">
             <thead id="thead-month"></thead>
@@ -126,8 +146,8 @@ echo "<script>const dbEvents = " . json_encode($events, JSON_HEX_TAG | JSON_HEX_
         "December"
     ];
     let days = [
-        "Sun", "Mon", "Tue", "Wed",
-        "Thu", "Fri", "Sat"];
+        "Mon", "Tue", "Wed",
+        "Thu", "Fri", "Sat", "Sun"];
 
     let dataHead = "<tr>";
     for (dhead in days) {
@@ -167,115 +187,25 @@ echo "<script>const dbEvents = " . json_encode($events, JSON_HEX_TAG | JSON_HEX_
         showCalendar(currentMonth, currentYear);
     }
 
-    //const apiCache = {}; // Cache for API responses
-
-    // function fetchAPIData(month, year, callback) {
-    //     const cacheKey = ${year}-${month};
-    //     if (apiCache[cacheKey]) {
-    //         console.log(Cache hit for ${cacheKey});
-    //         callback(apiCache[cacheKey]); // Use cached data
-    //         return;
-    //     }
-
-    //     console.log(Fetching API data for ${cacheKey});
-    //     const url = https://holidays.abstractapi.com/v1/?api_key=a57bf4f136374e0b9fb1b7ef886aabe9&country=GB&year=${year}&month=${month + 1};
-    //     const xhr = new XMLHttpRequest();
-
-    //     xhr.onreadystatechange = function () {
-    //         if (xhr.readyState === 4) {
-    //             if (xhr.status === 200) {
-    //                 const apiEvents = JSON.parse(xhr.responseText);
-    //                 console.log("API Response:", apiEvents);
-    //                 apiCache[cacheKey] = apiEvents; // Cache the result
-    //                 callback(apiEvents);
-    //             } else if (xhr.status === 429) {
-    //                 alert("Rate limit exceeded. Please try again later.");
-    //             } else {
-    //                 console.error(Error fetching API data. Status: ${xhr.status});
-    //             }
-    //         }
-    //     };
-
-    //     xhr.open("GET", url, true);
-    //     xhr.send();
-    // }
-
-
-    // // Function to check if an API event matches a database event
-    // function matchEvent(apiEvent) {
-    //     return dbEvents.find(dbEvent => {
-    //         return (
-    //             apiEvent.name.toLowerCase() === dbEvent.name.toLowerCase()
-    //         );
-    //     });
-    // }
-
-    // Function to add markers to the calendar
-    // function addEventMarkers(tbl, apiEvents) {
-    //     const cells = tbl.getElementsByTagName("td");
-
-    //     for (const cell of cells) {
-    //         if (cell.hasAttribute("data-date")) {
-    //             const cellDate = new Date(
-    //                 cell.getAttribute("data-year"),
-    //                 cell.getAttribute("data-month") - 1,
-    //                 cell.getAttribute("data-date")
-    //             ).toISOString().split("T")[0];
-
-    //             // Loop through API events and check if they match database events
-    //             apiEvents.forEach(apiEvent => {
-    //                 const matchedEvent = matchEvent(apiEvent);
-    //                 if (matchedEvent) {
-    //                     // Get the start date and duration from the matched event
-    //                     const startDate = new Date(apiEvent.date);
-    //                     const duration = parseInt(matchedEvent.duration);
-
-    //                     // Highlight the corresponding cells in the calendar
-    //                     for (let i = 0; i < duration; i++) {
-    //                         const eventDate = new Date(startDate);
-    //                         eventDate.setDate(startDate.getDate() + i);
-
-    //                         const eventCell = Array.from(cells).find(cell => {
-    //                             const eventCellDate = new Date(
-    //                                 cell.getAttribute("data-year"),
-    //                                 cell.getAttribute("data-month") - 1,
-    //                                 cell.getAttribute("data-date")
-    //                             ).toISOString().split("T")[0];
-    //                             return eventCellDate === eventDate.toISOString().split("T")[0];
-    //                         });
-
-    //                         if (eventCell) {
-    //                             eventCell.classList.add("event-marker");
-    //                             eventCell.innerHTML += <span class="event-tooltip">${apiEvent.name}</span>;
-    //                         }
-    //                     }
-    //                 }
-    //             });
-    //         }
-    //     }
-    // }
-
-
-// Ensure firstDay is calculated correctly and that cells are being added
+// Ensure showCalendar displays both events and holidays
 function showCalendar(month, year) {
     let firstDay = new Date(year, month, 1).getDay();
     let tbl = document.getElementById("calendar-body");
     tbl.innerHTML = ""; // Clear calendar body
 
-    // Fix the template literal for monthAndYear
-    monthAndYear.innerHTML = months[month] + ' ' + year;
+    monthAndYear.innerHTML = months[month] + " " + year;
     selectYear.value = year;
     selectMonth.value = month;
 
     let date = 1;
-    for (let i = 0; i < 6; i++) {  // 6 rows (weeks) max
+    for (let i = 0; i < 6; i++) { // Max 6 rows (weeks)
         let row = document.createElement("tr");
         for (let j = 0; j < 7; j++) { // 7 days in a week
             if (i === 0 && j < firstDay) {
-                let cell = document.createElement("td");  // Empty cell for days before the first of the month
+                let cell = document.createElement("td"); // Empty cells before the first of the month
                 row.appendChild(cell);
             } else if (date > daysInMonth(month, year)) {
-                break;  // Stop when we exceed the number of days in the month
+                break; // Stop if days exceed the current month
             } else {
                 let cell = document.createElement("td");
                 cell.setAttribute("data-date", date);
@@ -295,6 +225,12 @@ function showCalendar(month, year) {
                     eventsForDay.forEach(event => {
                         const eventTitle = document.createElement("div");
                         eventTitle.classList.add("event-title");
+
+                        // Highlight holidays with a different color
+                        if (event.title.toLowerCase().includes("bank holiday")) {
+                            eventTitle.classList.add("holiday-title");
+                        }
+
                         eventTitle.innerText = event.title;
                         cell.appendChild(eventTitle);
                     });
@@ -319,6 +255,9 @@ function showCalendar(month, year) {
         tbl.appendChild(row);
     }
 }
+
+// Ensure CSS styling for holidays
+
 
 // Make sure the daysInMonth function works correctly
 function daysInMonth(month, year) {

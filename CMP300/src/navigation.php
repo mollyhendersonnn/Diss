@@ -7,7 +7,7 @@ include("connection.php");
 ?>
 
 <div class="header-banner">
-    <img src="/mollyhenderson/CMP300/src/css/images/Acc_Logo_All_Black_RGB.png" alt="Logo" class="logo">
+    <img src="/mollyhenderson/CMP300/src/css/images/Acc_Logo_All_Black_RGB.png" alt="Accenture Logo" class="logo">
 </div>
 
 
@@ -36,5 +36,7 @@ include("connection.php");
         }
         ?>
     </ul>
-    <button class='btn btn-secondary mb-3 style="right: 30px;' onclick="history.back()">Back</button>
+    <button class="btn btn-secondary mb-3" style="right: 30px;" onclick="history.back()">
+    <img src="/mollyhenderson/CMP300/src/css/images/Acc_Back_Icon_Black_RGB.png" alt="Back button" style="height: 20px; width: 20px;" />
+</button>
 </div> 

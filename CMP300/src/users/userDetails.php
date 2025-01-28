@@ -53,7 +53,7 @@ if (isset($_GET['userID'])) {
 <body>
     <div class="container mt-5">
         <h2><?php echo htmlspecialchars($user['enterpriseID']); ?></h2>
-        <p><strong>First Name:</strong> <?php echo htmlspecialchars($user['firstName']); ?></p>
+        <p><strong>Name:</strong> <?php echo htmlspecialchars($user['firstName']); ?></p>
         <p><strong>Group:</strong> <?php echo htmlspecialchars($groupName); ?></p>
         <p><strong>Role:</strong> <?php echo htmlspecialchars($roleName); ?></p>
 

@@ -146,6 +146,14 @@ button:hover, .btn:hover {
 }
 
 /* Calendar Table */
+
+
+.selected {
+    background-color: var(--accent-purple4); /* Highlight today's date */
+    color: white;
+}
+
+
 .container-calendar {
     background: var(--accent-purple5);
     padding: 20px;
