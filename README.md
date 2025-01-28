@@ -1,14 +1,6 @@
 Hiya here are some tasks:
 
 
-
-- Change Back button to Black font to image
-
-
-
-- Load Event Type when Editing Event (Preloaded from DB)
-
-
 - calendar
   Border shadow remove (Done)
   
@@ -24,7 +16,7 @@ Hiya here are some tasks:
 
   Fixed cell size and fixed container
 
-  
+  -Data inputs
 
   
 
@@ -32,6 +24,10 @@ Hiya here are some tasks:
   
 
 --------------------------------------------------------------------------
+- Change Back button to Black font to imageE (DONE)
+
+- - Load Event Type when Editing Event (Preloaded from DB) (DONE)
+
 - rsvp notificastion (DONE)
 
 - - Downloading attachment / Visible to edit (so user can remove) (DONE)
