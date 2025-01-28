@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validation
     if (empty($username)) $username_err = "Please enter a username.";
     if (empty($password)) $password_err = "Please enter a password.";
-    if (empty($firstname)) $firstname_err = "Please enter the first name.";
+    if (empty($firstname)) $firstname_err = "Please enter the name.";
     if (empty($roleID)) $roleID_err = "Please enter a role ID.";
     if (empty($groupID)) $groupID_err = "Please enter a group ID.";
 
@@ -120,7 +120,7 @@ mysqli_close($link);
                 <span class="invalid-feedback"><?php echo $password_err; ?></span>
             </div>
             <div class="form-group">
-                <label for="firstname">First Name</label>
+                <label for="firstname">Name</label>
                 <input type="text" id="firstname" name="firstname"
                     class="form-control w-50 <?php echo (!empty($firstname_err)) ? 'is-invalid' : ''; ?>"
                     value="<?php echo $firstname; ?>">

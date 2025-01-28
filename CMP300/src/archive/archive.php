@@ -31,7 +31,7 @@ if (!empty($_SESSION['success_message'])) {
     // Check if the user is logged in and session variables exist
     if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         // Correct the query syntax
-        $query = "SELECT * FROM tbl_archive";
+        $query = "SELECT * FROM tbl_archive ORDER BY eventStart ASC";
         if ($stmt = mysqli_prepare($link, $query)) {
             // Execute the query
             mysqli_stmt_execute($stmt);

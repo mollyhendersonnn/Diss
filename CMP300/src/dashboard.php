@@ -41,7 +41,7 @@ $result = null;
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     if (!empty($_SESSION["groupID"])) {
         $query = "SELECT eventID, eventTitle, eventType, eventStart 
-                  FROM tbl_events WHERE groupID = ? AND stateID = 1";
+                  FROM tbl_events WHERE groupID = ? AND stateID = 1 ORDER BY eventStart ASC";
         if ($stmt = mysqli_prepare($link, $query)) {
             mysqli_stmt_bind_param($stmt, "i", $_SESSION["groupID"]);
             mysqli_stmt_execute($stmt);
@@ -52,7 +52,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     } else {
         // If the user is logged in but has no group, fetch all active events
         $query = "SELECT eventID, eventTitle, eventType, eventStart 
-                  FROM tbl_events WHERE stateID = 1";
+                  FROM tbl_events WHERE stateID = 1 ORDER BY eventStart ASC";
         $result = mysqli_query($link, $query);
         if ($result === false) {
             die("Database query failed: " . mysqli_error($link));
@@ -61,7 +61,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 } else {
     // If the user is not logged in, fetch all active events
     $query = "SELECT eventID, eventTitle, eventType, eventStart 
-              FROM tbl_events WHERE stateID = 1";
+              FROM tbl_events WHERE stateID = 1 ORDER BY eventStart ASC";
     $result = mysqli_query($link, $query);
     if ($result === false) {
         die("Database query failed: " . mysqli_error($link));
