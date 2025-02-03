@@ -93,9 +93,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <label for="eventType" class="form-label">Event Type</label>
                     <select type="text" class="form-control w-50" id="eventType" value="" name="eventType" required="">
                     <option value="" selected="" disabled="">Select an Event Type</option>
-                    <option value="Lunch and Learns">Lunch & Learns</option>
-                    <option value="Town Halls">Town Halls</option>
-                    <option value="Holiday Party">Holiday Party</option>
+                    <option value="Lunch and Learns" <?php echo $event['eventType'] == "Lunch and Learns" ? "selected" : ""; ?>>Lunch & Learns</option>
+                    <option value="Town Halls" <?php echo $event['eventType'] == "Town Halls" ? "selected" : ""; ?>>Town Halls</option>
+                    <option value="Party" <?php echo $event['eventType'] == "Party" ? "selected" : ""; ?>>Party</option>
+                    <option value="Newsletter" <?php echo $event['eventType'] == "Newsletter" ? "selected" : ""; ?>>Newsletter</option>
+                    <option value="All Hands" <?php echo $event['eventType'] == "All Hands" ? "selected" : ""; ?>>All Hands</option>
+                    <option value="Brownbag sessions" <?php echo $event['eventType'] == "Brownbag sessions" ? "selected" : ""; ?>>Brownbag sessions</option>
+                    <option value="Podcast" <?php echo $event['eventType'] == "Podcast" ? "selected" : ""; ?>>Podcast</option>
+                    <option value="Webcast" <?php echo $event['eventType'] == "Webcast" ? "selected" : ""; ?>>Webcast</option>
+                    <option value="Other" <?php echo $event['eventType'] == "Other" ? "selected" : ""; ?>>Other</option>
                     </select>
                 </div>
                 <div class="mb-3">

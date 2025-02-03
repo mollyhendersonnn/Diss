@@ -20,14 +20,15 @@ if (!isset($_GET['eventID']) || empty($_GET['eventID'])) {
 }
 
 $eventID = intval($_GET['eventID']); // Ensure eventID is an integer
-$userID = $_SESSION["userID"];
+$thisUserID = $_SESSION["userID"];
 
 // Fetch the event details
-$query = "SELECT eventID, eventTitle, eventType, eventDescription, eventStart, eventEnd, userID, groupID FROM tbl_events WHERE eventID = ?";
+$query = "SELECT eventID, groupID, userID, eventTitle, eventType, eventDescription, eventStart, eventEnd, numAttendees FROM tbl_events WHERE eventID = ?";
 if ($stmt = mysqli_prepare($link, $query)) {
     mysqli_stmt_bind_param($stmt, "i", $eventID);
     mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $eventID, $eventTitle, $eventType, $eventDescription, $eventStart, $eventEnd, $userID, $groupID);
+    mysqli_stmt_bind_result($stmt, $eventID, $groupID, $userID, $eventTitle, $eventType, $eventDescription, $eventStart, $eventEnd, $numAttendees);
+
 
     if (!mysqli_stmt_fetch($stmt)) {
         echo json_encode(["success" => false, "message" => "Event not found."]);
@@ -41,16 +42,16 @@ if ($stmt = mysqli_prepare($link, $query)) {
 }
 
 // Archive the event
-$query = "INSERT INTO tbl_archive (stateID, groupID, userID, eventTitle, eventType, eventStart, eventEnd, archiveReason) 
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+$query = "INSERT INTO tbl_archive (eventID, stateID, groupID, userID, eventTitle, eventType, eventStart, eventEnd, numAttendees, archiveReason) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 if ($stmt = mysqli_prepare($link, $query)) {
     $stateID = 2; 
     $archiveReason = 2; 
 
-    mysqli_stmt_bind_param($stmt, "iiissssi", $stateID, $groupID, $userID, $eventTitle, $eventType, $eventStart, $eventEnd, $archiveReason);
+    mysqli_stmt_bind_param($stmt, "iiiissssii", $eventID, $stateID, $groupID, $userID, $eventTitle, $eventType, $eventStart, $eventEnd, $numAttendees, $archiveReason);
 
     if (mysqli_stmt_execute($stmt)) {
-        // Delete the event from tbl_events
+    //    Delete the event from tbl_events
         $deleteQuery = "DELETE FROM tbl_events WHERE eventID = ?";
         if ($deleteStmt = mysqli_prepare($link, $deleteQuery)) {
             mysqli_stmt_bind_param($deleteStmt, "i", $eventID);
