@@ -60,7 +60,7 @@ if (isset($_GET['eventID'])) {
         <p><strong>End:</strong> <?php echo htmlspecialchars($event['eventEnd']) ?? ""; ?></p>
         <p><strong>Feedback:</strong> <?php echo htmlspecialchars($event['eventFeedback']) ?? ""; ?></p>
         <p><strong>Cost:</strong> <?php echo htmlspecialchars($event['eventCost']) ?? ""; ?></p>
-        <p><strong>Attendees:</strong> <?php echo isset($numAttendees) ? htmlspecialchars($numAttendees) : "0"; ?></p>
+        <p><strong>Attendees:</strong> <?php echo isset($event['numAttendees']) ? htmlspecialchars($event['numAttendees']) : "0"; ?></p>
         <p><strong>Outcome:</strong> <?php 
                                         if ($event['archiveReason'] == 2) {
                                             echo 'Cancelled';} 

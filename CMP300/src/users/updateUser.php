@@ -49,7 +49,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         mysqli_stmt_bind_param($stmt, "siissi", $firstName, $roleID, $groupID, $enterpriseID, $password, $userID);
 
         if (mysqli_stmt_execute($stmt)) {
-            //echo '<p class="success-message">User Updated Successfully!</p>';
             $_SESSION['success_message'] = "User Created Successfully!";
             header("Location: users.php");
             exit();
@@ -62,7 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         echo json_encode(["success" => false, "message" => "Database query preparation failed."]);
     }
 } else {
-    // Display the form if the request method is not POST
     ?>
     <!DOCTYPE html>
     <html lang="en">

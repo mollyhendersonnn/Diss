@@ -47,7 +47,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
         } else {
-            die("Database query preparation failed: " . mysqli_error($link));
+            die("Query binding failed: " . mysqli_error($link));
         }
     } else {
         // If the user is logged in but has no group, fetch all active events
@@ -55,7 +55,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
                   FROM tbl_events WHERE stateID = 1 ORDER BY eventStart ASC";
         $result = mysqli_query($link, $query);
         if ($result === false) {
-            die("Database query failed: " . mysqli_error($link));
+            die("SQL failed: " . mysqli_error($link));
         }
     }
 } else {
@@ -64,7 +64,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
               FROM tbl_events WHERE stateID = 1 ORDER BY eventStart ASC";
     $result = mysqli_query($link, $query);
     if ($result === false) {
-        die("Database query failed: " . mysqli_error($link));
+        die("SQL failed: " . mysqli_error($link));
     }
 }
 ?>
@@ -123,7 +123,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
             }
             mysqli_stmt_close($stmt);
         } else {
-            echo "Error preparing archive query: " . mysqli_error($link);
+            echo "Query prep failed for archive: " . mysqli_error($link);
         }
     
         // Delete the archived events from tbl_events
@@ -136,7 +136,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
             }
             mysqli_stmt_close($stmt);
         } else {
-            echo "Error preparing delete query: " . mysqli_error($link);
+            echo "Query prep failed: " . mysqli_error($link);
         }
     }
     

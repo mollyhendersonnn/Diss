@@ -34,7 +34,7 @@ try {
         $holidays[] = [
             "title" => $holiday['title'],
             "start" => $holiday['date'],
-            "end" => $holiday['date'], // Single-day event
+            "end" => $holiday['date'],
         ];
     }
 } catch (Exception $e) {
@@ -107,8 +107,7 @@ echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_H
 
 
 <script>
-    // Function to generate a range of 
-    // years for the year select input
+    //Function to generate a range of years
     function generate_year_range(start, end) {
         let years = "";
         for (let year = start; year <= end; year++) {
@@ -118,15 +117,13 @@ echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_H
         return years;
     }
 
-    // Initialize date-related letiables
+    //Set date variables
     today = new Date();
     currentMonth = today.getMonth();
     currentYear = today.getFullYear();
     selectYear = document.getElementById("year");
     selectMonth = document.getElementById("month");
-
     createYear = generate_year_range(1970, 2050);
-
     document.getElementById("year").innerHTML = createYear;
 
     let calendar = document.getElementById("calendar");
@@ -146,8 +143,8 @@ echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_H
         "December"
     ];
     let days = [
-        "Mon", "Tue", "Wed",
-        "Thu", "Fri", "Sat", "Sun"];
+        "Sun", "Mon", "Tue", "Wed",
+        "Thu", "Fri", "Sat"];
 
     let dataHead = "<tr>";
     for (dhead in days) {
@@ -163,7 +160,7 @@ echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_H
         document.getElementById("monthAndYear");
     showCalendar(currentMonth, currentYear);
 
-    // Function to navigate to the next month
+    //Function to go to the next month
     function next() {
         currentYear = currentMonth === 11 ?
             currentYear + 1 : currentYear;
@@ -171,7 +168,7 @@ echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_H
         showCalendar(currentMonth, currentYear);
     }
 
-    // Function to navigate to the previous month
+    //Function to go to the previous month
     function previous() {
         currentYear = currentMonth === 0 ?
             currentYear - 1 : currentYear;
@@ -180,32 +177,32 @@ echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_H
         showCalendar(currentMonth, currentYear);
     }
 
-    // Function to jump to a specific month and year
+    //Function to go to a specific month and year
     function jump() {
         currentYear = parseInt(selectYear.value);
         currentMonth = parseInt(selectMonth.value);
         showCalendar(currentMonth, currentYear);
     }
 
-// Ensure showCalendar displays both events and holidays
+//showCalendar displays both events and holidays
 function showCalendar(month, year) {
     let firstDay = new Date(year, month, 1).getDay();
     let tbl = document.getElementById("calendar-body");
-    tbl.innerHTML = ""; // Clear calendar body
+    tbl.innerHTML = ""; 
 
     monthAndYear.innerHTML = months[month] + " " + year;
     selectYear.value = year;
     selectMonth.value = month;
 
     let date = 1;
-    for (let i = 0; i < 6; i++) { // Max 6 rows (weeks)
+    for (let i = 0; i < 6; i++) { 
         let row = document.createElement("tr");
-        for (let j = 0; j < 7; j++) { // 7 days in a week
+        for (let j = 0; j < 7; j++) { 
             if (i === 0 && j < firstDay) {
-                let cell = document.createElement("td"); // Empty cells before the first of the month
+                let cell = document.createElement("td"); 
                 row.appendChild(cell);
             } else if (date > daysInMonth(month, year)) {
-                break; // Stop if days exceed the current month
+                break; 
             } else {
                 let cell = document.createElement("td");
                 cell.setAttribute("data-date", date);
@@ -256,10 +253,9 @@ function showCalendar(month, year) {
     }
 }
 
-// Ensure CSS styling for holidays
 
 
-// Make sure the daysInMonth function works correctly
+//daysInMonth function
 function daysInMonth(month, year) {
     return new Date(year, month + 1, 0).getDate();
 }
