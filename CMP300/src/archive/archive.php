@@ -43,7 +43,7 @@ if (!empty($_SESSION['success_message'])) {
     ?>
 
     <div class="container mt-5">
-        <h2 class="mb-4">Events</h2>
+        <h2 class="mb-4">Historical Events</h2>
         <input type="text" id="searchBar" class="form-control mb-3" placeholder="Search for events...">
         <table class="table table-bordered table-striped">
             <thead class="thead-dark">

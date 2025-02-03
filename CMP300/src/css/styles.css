@@ -1,6 +1,6 @@
 :root {
-    --core-purple1: #a100ff; /* Main button color */
-    --core-purple2: #7500c0; /* Hover color for buttons */
+    --core-purple1: #a100ff; 
+    --core-purple2: #7500c0; 
     --core-purple3: #460073;
     --accent-purple1: #b455aa;
     --accent-purple2: #a055f5;
@@ -23,7 +23,7 @@
 }
 
 body {
-    font-family: var(--font);
+    font-family: var(--font) !important;
     color: var(--black);
     background-color: var(--accent-purple6) !important;
     min-height: 100vh;
@@ -98,10 +98,10 @@ body {
 }
 
   .corner-alert {
-    position: fixed; /* Fix the position relative to the viewport */
-    top: -5%; /* Distance from the top */
-    right: auto; /* Distance from the right */
-    z-index: 1000; /* Ensure it stays above other elements */
+    position: fixed;
+    top: -5%; 
+    right: auto; 
+    z-index: 1000; 
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   }
 
@@ -110,7 +110,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px; /* Add space between buttons and heading */
+    gap: 10px; 
   }
 
   #right button {
@@ -146,10 +146,8 @@ button:hover, .btn:hover {
 }
 
 /* Calendar Table */
-
-
 .selected {
-    background-color: var(--accent-purple4); /* Highlight today's date */
+    background-color: var(--accent-purple4); 
     color: white;
 }
 
@@ -169,34 +167,34 @@ button:hover, .btn:hover {
 }
 
 .table-calendar {
-    width: 90%; /* Increase the width to take up more screen space */
+    width: 90%; 
     border-collapse: collapse;
     background-color: var(--white);
     border: 1px solid var(--dark-grey);
-    margin: 0 auto; /* Center the calendar on the page */
+    margin: 0 auto; 
 }
 
 .table-calendar th,
 .table-calendar td {
     border: 1px solid var(--black-lighter);
     text-align: center;
-    padding: 20px; /* Increase padding for larger cells */
-    font-size: 12px; /* Slightly larger text for readability */
+    padding: 20px; 
+    font-size: 12px; 
     color: var(--black);
-    height: 80px; /* Make each cell taller */
+    height: 80px; 
     font-weight: bold;
 }
 
 .table-calendar th {
     background-color: var(--accent-purple3);
     font-weight: bold;
-    font-size: 18px; /* Slightly larger text for headers */
+    font-size: 18px; 
 }
 
 .table-calendar td.date-picker {
     background-color: var(--white);
     cursor: pointer;
-    transition: background-color 0.3s; /* Smooth hover transition */
+    transition: background-color 0.3s; 
 }
 
 .table-calendar td.date-picker:hover {
@@ -210,26 +208,26 @@ button:hover, .btn:hover {
     font-weight: bold;
 }
 
-/* Optional: Adjust the month and year display */
+
 #monthAndYear {
     text-align: center;
-    font-size: 24px; /* Larger font for the month and year */
+    font-size: 24px; 
     font-weight: bold;
     margin-bottom: 20px;
-    color: var(--core-purple1); /* Add color to the title for emphasis */
+    color: var(--core-purple1); 
 }
 
-/* Optional: Add responsive design for smaller screens */
+
 @media screen and (max-width: 768px) {
     .table-calendar {
-        width: 100%; /* Adjust to fit smaller screens */
+        width: 100%; 
     }
 
     .table-calendar th,
     .table-calendar td {
         padding: 10px;
         font-size: 12px;
-        height: 50px; /* Reduce height for smaller screens */
+        height: 50px; 
     }
 
     #monthAndYear {

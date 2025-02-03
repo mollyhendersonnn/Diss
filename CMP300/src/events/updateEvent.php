@@ -6,21 +6,22 @@ if (session_status() === PHP_SESSION_NONE) {
 include_once("../connection.php");
 include_once("../navigation.php");
 
-// Check if the user is logged in
+//Check the user is logged in
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    echo json_encode(["success" => false, "message" => "You must be logged in to update an event."]);
+    echo json_encode(["success" => false, "message" => "Please log-in to update events."]);
     exit;
 }
 
-// Check if eventID is provided
+//Check eventID is there
 if (!isset($_GET['eventID'])) {
-    echo json_encode(["success" => false, "message" => "No event ID provided."]);
+    echo json_encode(["success" => false, "message" => "Error getting the EventID."]);
     exit;
 }
 
+//Store the eventID as a variable
 $eventID = $_GET['eventID'];
 
-// Fetch the existing event details
+//Get all the event details from the tbl_events table
 $query = "SELECT * FROM tbl_events WHERE eventID = ?";
 if ($stmt = mysqli_prepare($link, $query)) {
     mysqli_stmt_bind_param($stmt, "i", $eventID);
@@ -29,7 +30,7 @@ if ($stmt = mysqli_prepare($link, $query)) {
     $event = mysqli_fetch_assoc($result);
     mysqli_stmt_close($stmt);
 } else {
-    echo json_encode(["success" => false, "message" => "Failed to fetch event details."]);
+    echo json_encode(["success" => false, "message" => "Failed to get all the events."]);
     exit;
 }
 
