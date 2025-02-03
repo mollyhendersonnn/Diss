@@ -185,6 +185,61 @@ button:hover, .btn:hover {
     font-weight: bold;
 }
 
+.table-calendar td {
+    width: 100px;  
+    height: 100px;  
+    position: relative;
+    text-align: left;  
+    vertical-align: top;  
+    padding: 5px; 
+}
+
+.day-number {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--black);
+}
+
+/* Numeric event indicator */
+.event-indicator {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--core-purple1);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Tooltip styling */
+.event-tooltip {
+    display: none;
+    position: absolute;
+    top: 25px;
+    right: 5px;
+    background: white;
+    border: 1px solid var(--black-lighter);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 8px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 10;
+    border-radius: 5px;
+    color: black; /* Ensure text is visible */
+    background-color: white; /* Proper contrast */
+    padding: 5px;
+    border-radius: 5px;
+    text-decoration: none; /* Remove underline */
+}
+
 .table-calendar th {
     background-color: var(--accent-purple3);
     font-weight: bold;

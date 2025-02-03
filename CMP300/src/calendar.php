@@ -9,12 +9,26 @@ include_once("connection.php");
 include_once("navigation.php");
 
 // Fetch events from the tbl_events table
-$sql = "SELECT eventTitle, eventStart, eventEnd FROM tbl_events";
+$sql = "SELECT eventID, eventTitle, eventStart, eventEnd FROM tbl_events";
 $result = mysqli_query($link, $sql);
+
+$sqlarch = "SELECT archiveID, eventTitle, eventStart, eventEnd FROM tbl_archive";
+$resultarch = mysqli_query($link, $sqlarch);
 
 $events = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $events[] = [
+        "id" => $row["eventID"],
+        "title" => $row['eventTitle'],
+        "start" => $row['eventStart'],
+        "end" => $row['eventEnd'],
+    ];
+}
+
+$archevents = [];
+while ($row = mysqli_fetch_assoc($resultarch)) {
+    $archevents[] = [
+        "idarch" => $row["archiveID"],
         "title" => $row['eventTitle'],
         "start" => $row['eventStart'],
         "end" => $row['eventEnd'],
@@ -42,7 +56,8 @@ try {
 }
 
 // Merge holidays with database events
-$allEvents = array_merge($events, $holidays);
+$allEvents = array_merge($events, $archevents, $holidays);
+
 
 // Pass events to JavaScript as a JSON object
 echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ";</script>";
@@ -184,8 +199,8 @@ echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_H
         showCalendar(currentMonth, currentYear);
     }
 
-//showCalendar displays both events and holidays
-function showCalendar(month, year) {
+    // Calendar
+    function showCalendar(month, year) {
     let firstDay = new Date(year, month, 1).getDay();
     let tbl = document.getElementById("calendar-body");
     tbl.innerHTML = ""; 
@@ -197,9 +212,11 @@ function showCalendar(month, year) {
     let date = 1;
     for (let i = 0; i < 6; i++) { 
         let row = document.createElement("tr");
-        for (let j = 0; j < 7; j++) { 
-            if (i === 0 && j < firstDay) {
-                let cell = document.createElement("td"); 
+
+
+        for (let j = 0; j < 7; j++) { // 7 days in a week
+            if (i === 0 && j < (firstDay === 0 ? 6 : firstDay - 1)) { 
+                let cell = document.createElement("td");
                 row.appendChild(cell);
             } else if (date > daysInMonth(month, year)) {
                 break; 
@@ -208,6 +225,10 @@ function showCalendar(month, year) {
                 cell.setAttribute("data-date", date);
                 cell.setAttribute("data-month", month + 1);
                 cell.setAttribute("data-year", year);
+                cell.classList.add("date-picker");
+
+                // Add the date number at the top-left corner
+                cell.innerHTML = `<span class="day-number">${date}</span>`;
 
                 // Check for events on this day
                 const cellDate = new Date(year, month, date).toISOString().split("T")[0];
@@ -217,24 +238,66 @@ function showCalendar(month, year) {
                     return cellDate >= startDate && cellDate <= endDate;
                 });
 
-                // Add event titles to the day cell
+                // If there are events, show the indicator with a pop-up tooltip
                 if (eventsForDay.length > 0) {
-                    eventsForDay.forEach(event => {
-                        const eventTitle = document.createElement("div");
-                        eventTitle.classList.add("event-title");
+                    const eventIndicator = document.createElement("span");
+                    eventIndicator.classList.add("event-indicator");
+                    eventIndicator.innerText = eventsForDay.length;
+                    cell.appendChild(eventIndicator);
 
-                        // Highlight holidays with a different color
-                        if (event.title.toLowerCase().includes("bank holiday")) {
-                            eventTitle.classList.add("holiday-title");
-                        }
+                // Tooltip container
+                    const tooltip = document.createElement("div");
+                    tooltip.classList.add("event-tooltip");
+                // tooltip.innerHTML = eventsForDay.map(event => `<div>${event.title}</div>`).join("");
+                    
+                 // Create clickable links for event titles
+                       tooltip.innerHTML = eventsForDay.map(event => {
+                       let eventLink = '';
 
-                        eventTitle.innerText = event.title;
-                        cell.appendChild(eventTitle);
+               // Check if it's a main event or archived event and build the corresponding link
+                      if (event.id) {
+                       eventLink = `<a href='events/eventDetails.php?eventID=${event.id}' class='event-link'>${event.title}</a>`;
+                     } else if (event.idarch) {
+                       eventLink = `<a href='events/archiveEventDetails.php?eventID=${event.idarch}' class='event-link'>${event.title}</a>`;
+                       }
+
+                      return `<div class='tooltip-item'>${eventLink}</div>`;
+                     }).join("<br>");
+                    
+
+
+
+    // Attach hover event listeners for showing/hiding the tooltip
+    let tooltipVisible = false;
+
+
+                    // Attach hover event listeners
+                    eventIndicator.addEventListener("mouseover", function () {
+                        tooltip.style.display = "block";
+                        tooltipVisible = true;
                     });
-                }
+                    eventIndicator.addEventListener("mouseout", function () {
+                        if (!tooltip.matches(':hover')) {
+                        tooltip.style.display = "none";
+                        tooltipVisible = false;
+                    }
+                    });
 
-                // Add the date number to the cell
-                cell.innerHTML = `<span>${date}</span>` + cell.innerHTML;
+                    tooltip.addEventListener("mouseover", function () {
+                    tooltip.style.display = "block";  // Keep it visible when hovering over the tooltip
+                    });
+
+                    tooltip.addEventListener("mouseout", function () {
+                     // Only hide the tooltip if the mouse is not over the event indicator or the tooltip itself
+                      if (!eventIndicator.matches(':hover')) {
+                        tooltip.style.display = "none";
+                        tooltipVisible = false;
+                        }
+    });
+
+                    // Append tooltip to the cell
+                    cell.appendChild(tooltip);
+                }
 
                 // Highlight today's date
                 if (
@@ -242,7 +305,7 @@ function showCalendar(month, year) {
                     year === today.getFullYear() &&
                     month === today.getMonth()
                 ) {
-                    cell.className = "selected";
+                    cell.classList.add("selected");
                 }
 
                 row.appendChild(cell);
