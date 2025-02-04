@@ -1,35 +1,34 @@
 <?php
-
-// Start the session
+//start the session if there isnt one detected
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 include_once("../connection.php");
-//include_once("../navigation.php");  
+include_once("../clean.php");
 
-// Check if the user is logged in
+//is user logged in in the session
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     echo json_encode(["success" => false, "message" => "You must be logged in to delete an archived event."]);
     exit;
 }
 
-// Check if eventID is provided
+//is eventID in URL
 if (!isset($_GET['eventID']) || empty($_GET['eventID'])) {
     echo json_encode(["success" => false, "message" => "No event ID provided."]);
     exit;
 }
 
-$eventID = intval($_GET['eventID']); // Ensure eventID is an integer
+//makes sure eventID is an int
+$eventID = intval($_GET['eventID']);
 
-// Delete the event from tbl_archive
+//deletes from the table based on eventID
 $query = "DELETE FROM tbl_archive WHERE eventID = ?";
 if ($stmt = mysqli_prepare($link, $query)) {
     mysqli_stmt_bind_param($stmt, "i", $eventID);
 
     if (mysqli_stmt_execute($stmt)) {
         if (mysqli_stmt_affected_rows($stmt) > 0) {
-            // Redirect to the archive page
             $_SESSION['success_message'] = "Event Deleted Successfully!";
             header("Location: archive.php");
             exit();

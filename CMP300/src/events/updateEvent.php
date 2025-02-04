@@ -1,27 +1,29 @@
 <?php
+//start the session if there isnt one detected
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 include_once("../connection.php");
-include_once("../navigation.php");
+include_once("../navigation.php"); 
+include_once("../clean.php"); 
 
-//Check the user is logged in
+//check the user is logged in
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     echo json_encode(["success" => false, "message" => "Please log-in to update events."]);
     exit;
 }
 
-//Check eventID is there
+//check eventID is there
 if (!isset($_GET['eventID'])) {
     echo json_encode(["success" => false, "message" => "Error getting the EventID."]);
     exit;
 }
 
-//Store the eventID as a variable
+//store the eventID as a variable
 $eventID = $_GET['eventID'];
 
-//Get all the event details from the tbl_events table
+//get all the event details from the tbl_events table
 $query = "SELECT * FROM tbl_events WHERE eventID = ?";
 if ($stmt = mysqli_prepare($link, $query)) {
     mysqli_stmt_bind_param($stmt, "i", $eventID);
@@ -34,7 +36,7 @@ if ($stmt = mysqli_prepare($link, $query)) {
     exit;
 }
 
-// Handle form submission
+//form submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $eventTitle = htmlspecialchars(trim($_POST["eventTitle"]));
     $eventType = $_POST["eventType"];
@@ -42,26 +44,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $eventStart = $_POST["eventStart"];
     $eventEnd = $_POST["eventEnd"];
 
-    // Variables for file content and MIME type
+    //set variables for file content and mime type
     $imageContent = null;
     $mimeType = null;
 
-    // Check if a new file was uploaded
+    //check if a new file was uploaded
     if (isset($_FILES["eventFile"]) && $_FILES["eventFile"]["error"] == 0) {
         $fileTmpPath = $_FILES["eventFile"]["tmp_name"];
         $imageContent = file_get_contents($fileTmpPath);
-        $mimeType = mime_content_type($fileTmpPath); // Detect the file type
+        $mimeType = mime_content_type($fileTmpPath); 
     } else {
-        // If no new file is uploaded, retain the existing file and MIME type
+        //if there is no new file then retain the current file 
         $imageContent = $event['eventFile'];
         $mimeType = $event['fileType'];
     }
 
-    // Validate date and time
+    //ensure start date is before end date
     if (strtotime($eventEnd) <= strtotime($eventStart)) {
         echo '<p class="alert alert-danger">End Date or Time in the past</p>';
     } else {
-        // Update the event details in the database
+        //update the details
         $query = "UPDATE tbl_events SET eventFile = ?, fileType = ?, eventTitle = ?, eventType = ?, eventDescription = ?, eventStart = ?, eventEnd = ? WHERE eventID = ?";
         if ($stmt = mysqli_prepare($link, $query)) {
             mysqli_stmt_bind_param($stmt, "sssssssi", $imageContent, $mimeType, $eventTitle, $eventType, $eventDescription, $eventStart, $eventEnd, $eventID);
@@ -100,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <option value="" disabled>Select an Event Type</option>
                     <option value="Lunch and Learns" <?php echo $event['eventType'] == "Lunch and Learns" ? "selected" : ""; ?>>Lunch & Learns</option>
                     <option value="Town Halls" <?php echo $event['eventType'] == "Town Halls" ? "selected" : ""; ?>>Town Halls</option>
-                    <option value="Party" <?php echo $event['eventType'] == "Party" ? "selected" : ""; ?>>Party</option>
+                    <option value="Social" <?php echo $event['eventType'] == "Social" ? "selected" : ""; ?>>Social</option>
                     <option value="Newsletter" <?php echo $event['eventType'] == "Newsletter" ? "selected" : ""; ?>>Newsletter</option>
                     <option value="All Hands" <?php echo $event['eventType'] == "All Hands" ? "selected" : ""; ?>>All Hands</option>
                     <option value="Brownbag sessions" <?php echo $event['eventType'] == "Brownbag sessions" ? "selected" : ""; ?>>Brownbag sessions</option>

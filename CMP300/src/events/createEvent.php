@@ -1,18 +1,20 @@
 <?php
+//start the session if there isnt one detected
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 include_once("../connection.php");
-include_once("../navigation.php");
+include_once("../navigation.php"); 
+include_once("../clean.php"); 
 
-// Check if the user is logged in
+//check the user is logged in
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     echo '<p class="fail-message">You must be logged in to create an event.</p>';
     exit;
 }
 
-// Handle form submission
+//form
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $eventTitle = htmlspecialchars(trim($_POST["eventTitle"]));
     $eventType = $_POST["eventType"];
@@ -24,22 +26,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $currentDate = date("Y-m-d H:i:s");
     $stateID = ($eventStart > $currentDate) ? 1 : 2;
 
-    // Initialize variables for file content and MIME type
+    //variables for file content and mime type
     $imageContent = null;
     $mimeType = null;
 
-    // Handling file upload
+    //file upload
     if (isset($_FILES["eventFile"]) && $_FILES["eventFile"]["error"] == 0) {
         $fileTmpPath = $_FILES["eventFile"]["tmp_name"];
         $imageContent = file_get_contents($fileTmpPath);
-        $mimeType = mime_content_type($fileTmpPath); // Detect the file type
+        $mimeType = mime_content_type($fileTmpPath);
     }
 
-    // Validate date and time
+    //ensure the end date is after start date
     if (strtotime($eventEnd) <= strtotime($eventStart)) {
         echo '<p class="alert alert-danger">End Date or Time in the past</p>';
     } else {
-        // Prepare the SQL query
         $query = "INSERT INTO tbl_events (eventFile, fileType, userID, groupID, stateID, eventTitle, eventType, eventDescription, eventStart, eventEnd) 
                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         if ($stmt = mysqli_prepare($link, $query)) {
@@ -80,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <option value="" selected disabled>Select an Event Type</option>
                     <option value="Lunch and Learns">Lunch & Learns</option>
                     <option value="Town Halls">Town Halls</option>
-                    <option value="Party">Party</option>
+                    <option value="Social">Social</option>
                     <option value="Newsletter">Newsletter</option>
                     <option value="All Hands">All hands</option>
                     <option value="Brownbag sessions">Brownbag sessions</option>

@@ -1,27 +1,27 @@
 <?php
-// Start the session
+//start the session if there isnt one detected
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 include_once("../connection.php");
-include_once("../navigation.php");
+include_once("../navigation.php"); 
+include_once("../clean.php"); 
 
-// Check if the user is logged in
+//check the user is logged in
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     echo json_encode(["success" => false, "message" => "You must be logged in to update a user."]);
     exit;
 }
 
-// Check if userID is provided
+//check the userID
 if (!isset($_GET['userID'])) {
     echo json_encode(["success" => false, "message" => "No user ID provided."]);
     exit;
 }
-
 $userID = $_GET['userID'];
 
-// Fetch the user details
+//get all user information based on userID
 $query = "SELECT * FROM tbl_users WHERE userID = ?";
 if ($stmt = mysqli_prepare($link, $query)) {
     mysqli_stmt_bind_param($stmt, "i", $userID);
@@ -34,15 +34,15 @@ if ($stmt = mysqli_prepare($link, $query)) {
     exit;
 }
 
-// Handle form submission
+//form submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $firstName = htmlspecialchars(trim($_POST["firstName"]));
     $roleID = $_POST["roleID"];
     $groupID = $_POST["groupID"];
     $enterpriseID = htmlspecialchars(trim($_POST["enterpriseID"]));
-    $password = password_hash(trim($_POST["password"]), PASSWORD_DEFAULT); // Hashing the password
+    $password = password_hash(trim($_POST["password"]), PASSWORD_DEFAULT); 
 
-    // Prepare the SQL query to update the user
+    //prep query
     $query = "UPDATE tbl_users SET firstName = ?, roleID = ?, groupID = ?, enterpriseID = ?, password = ? WHERE userID = ?";
 
     if ($stmt = mysqli_prepare($link, $query)) {
