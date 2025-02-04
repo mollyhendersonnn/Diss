@@ -1,5 +1,5 @@
 <?php
-//Define credentials for connecting to the server
+//credentials to connect to db
 define('DB_SERVER', '213.171.200.34');
 define('DB_USERNAME', 'mhenderson');
 define('DB_PASSWORD', 'GingerBreadMan20');
@@ -16,9 +16,3 @@ if ($link) {
     echo mysqli_connect_error();
 }
 ?>
-
-
-
-
-
-

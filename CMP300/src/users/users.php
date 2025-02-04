@@ -1,23 +1,20 @@
 <?php
-// Start the session
+//start the session if there isnt one detected
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Include database connection
 include_once("../connection.php");
-include_once("../navigation.php");
-//include_once("audit.php");
+include_once("../navigation.php"); 
+include_once("../clean.php"); 
 
-if (!empty($_SESSION['success_message'])) {
+if (!empty($_SESSION['success_message'])) 
     echo "<p class='alert alert-success'>" . $_SESSION['success_message'] . "</p>";
-    unset($_SESSION['success_message']); // Clear the message after displaying
-}
+    unset($_SESSION['success_message']); 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8"> 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,14 +25,13 @@ if (!empty($_SESSION['success_message'])) {
 </head>
 
 <body>
-    <?php
+    
+ <?php
 
-
-// Initialize the result variable
+//ini the result variable as null
 $result = null;
 
-
-// Check if the user is logged in and session variables exist
+//check user is logged in
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         $query = "SELECT u.userID, u.enterpriseID, u.firstName, u.groupID, u.roleID, r.roleName, g.groupName
         FROM tbl_users u 
@@ -59,7 +55,6 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         <table class="table table-bordered table-striped">
         <thead class="thead-dark">
     <tr>
-        <!-- Define static column headers -->
         <th>Enterprise ID</th>
         <th>First Name</th>
         <th>Group</th>
@@ -68,10 +63,9 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 </thead>
 <tbody id="userTableBody">
     <?php
-    // Display only the required columns
     if ($result && mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
-
+            //assign as variables for columns
             $roleName = $row['roleName'];
             $groupName = $row['groupName'];
 
@@ -94,6 +88,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 </body>
 </html>
 <script>
+    //search functionality
     document.addEventListener('DOMContentLoaded', function () {
         const searchBar = document.getElementById('searchBar');
         const tableBody = document.getElementById('userTableBody');
@@ -102,12 +97,11 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         searchBar.addEventListener('keyup', function () {
             const filter = searchBar.value.toLowerCase();
 
-            // Loop through all table rows
+    
             for (let row of rows) {
                 const cells = row.getElementsByTagName('td');
                 let match = false;
 
-                // Check if any cell in the row contains the filter text
                 for (let cell of cells) {
                     if (cell.textContent.toLowerCase().indexOf(filter) > -1) {
                         match = true;
@@ -115,7 +109,6 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
                     }
                 }
 
-                // Toggle the row's visibility based on match status
                 row.style.display = match ? '' : 'none';
             }
         });

@@ -1,55 +1,56 @@
 <?php
+//start the session if there isnt one detected
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-
 include_once("../connection.php");
-include_once("../navigation.php");  
+include_once("../navigation.php"); 
+include_once("../clean.php"); 
 
-// Define variables and initialize with empty values
+//define the variables to empty strings
 $username = $password = $firstname = $roleID = $groupID = "";
 $username_err = $password_err = $firstname_err = $roleID_err = $groupID_err = "";
 
 
-// Query to fetch roles from the database
-$sql_roles = "SELECT roleID, roleName FROM tbl_roles"; // Adjust "roles" to your actual table name
+//get roles for dropdown
+$sql_roles = "SELECT roleID, roleName FROM tbl_roles"; 
 $result_roles = mysqli_query($link, $sql_roles);
 
 if ($result_roles) {
-    $tbl_roles = mysqli_fetch_all($result_roles, MYSQLI_ASSOC); // Fetch all roles
+    $tbl_roles = mysqli_fetch_all($result_roles, MYSQLI_ASSOC); 
 } else {
     echo "Error fetching roles: " . mysqli_error($link);
 }
 
-// Query to fetch Groups from the database
-$sql_group = "SELECT groupID, groupName FROM tbl_group"; // Adjust "roles" to your actual table name
+// get groups for dropdown
+$sql_group = "SELECT groupID, groupName FROM tbl_group";
 $result_group = mysqli_query($link, $sql_group);
 
 if ($result_group) {
-    $tbl_group = mysqli_fetch_all($result_group, MYSQLI_ASSOC); // Fetch all roles
+    $tbl_group = mysqli_fetch_all($result_group, MYSQLI_ASSOC);
 } else {
     echo "Error fetching roles: " . mysqli_error($link);
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Sanitize inputs
+    //sanitise the inputs
     $username = isset($_POST["username"]) ? trim($_POST["username"]) : "";
     $password = isset($_POST["password"]) ? trim($_POST["password"]) : "";
     $firstname = isset($_POST["firstname"]) ? trim($_POST["firstname"]) : "";
     $roleID = isset($_POST["roleID"]) ? (int) $_POST["roleID"] : 0;
     $groupID = isset($_POST["groupID"]) ? (int) $_POST["groupID"] : 0;
 
-    // Validation
+    //ensure everything has been filled in
     if (empty($username)) $username_err = "Please enter a username.";
     if (empty($password)) $password_err = "Please enter a password.";
     if (empty($firstname)) $firstname_err = "Please enter the name.";
     if (empty($roleID)) $roleID_err = "Please enter a role ID.";
     if (empty($groupID)) $groupID_err = "Please enter a group ID.";
 
-    // Check for errors
+    //check for any erros
     if (empty($username_err) && empty($password_err) && empty($firstname_err) && empty($roleID_err) && empty($groupID_err)) {
-        // Check if the username already exists
+        //dont create user if username exists
         $sql = "SELECT * FROM tbl_users WHERE enterpriseID = ?";
         if ($stmt = mysqli_prepare($link, $sql)) {
             mysqli_stmt_bind_param($stmt, "s", $username);
@@ -58,12 +59,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $result = mysqli_stmt_get_result($stmt);
 
                 if (mysqli_num_rows($result) > 0) {
-                    echo "Enterprise ID exists, please try again.";
+                   echo '<p class="alert alert-success">"Enterprise ID exists, please try again.";</p>';
                 } else {
-                    // Hash the password
+                    //hash the password using PHP hashing
                     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-                    // Insert the new user into the database
+                    //insert details into db
                     $sql_insert = "INSERT INTO tbl_users (roleID, groupID, enterpriseID, password, firstName) VALUES (?, ?, ?, ?, ?)";
                     if ($stmt_insert = mysqli_prepare($link, $sql_insert)) {
                         mysqli_stmt_bind_param($stmt_insert, "iisss", $roleID, $groupID, $username, $hashed_password, $firstname);
@@ -89,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Close database connection
+//close the connection
 mysqli_close($link);
 ?>
 
@@ -110,7 +111,7 @@ mysqli_close($link);
         <p>Fill out this form to create a new user.</p>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form-group">
-                <label for="username">Username</label>
+                <label for="username">Enterprise ID</label>
                 <input type="text" id="username" name="username" class="form-control w-50" <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
                 <span class="invalid-feedback"><?php echo $username_err; ?></span>
             </div>
@@ -131,7 +132,6 @@ mysqli_close($link);
     <select id="roleID" name="roleID" class="form-control w-50 <?php echo (!empty($roleID_err)) ? 'is-invalid' : ''; ?>">
         <option value="">Select a Role</option>
         <?php
-        // Dynamically populate dropdown with roles
         foreach ($tbl_roles as $role) {
             echo '<option value="' . $role['roleID'] . '">' . htmlspecialchars($role['roleName']) . '</option>';
         }
@@ -144,7 +144,6 @@ mysqli_close($link);
     <select id="groupID" name="groupID" class="form-control w-50 <?php echo (!empty($groupID_err)) ? 'is-invalid' : ''; ?>">
         <option value="">Select a Group</option>
         <?php
-        // Dynamically populate dropdown with groups
         foreach ($tbl_group as $group) {
             echo '<option value="' . $group['groupID'] . '">' . htmlspecialchars($group['groupName']) . '</option>';
         }

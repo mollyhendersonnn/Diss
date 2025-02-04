@@ -1,23 +1,19 @@
 <?php
-
+//start the session if there isnt one detected
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-
 include_once("../connection.php");
-include_once("../navigation.php");  
+include_once("../navigation.php"); 
+include_once("../clean.php"); 
 
 
-// Ensure error reporting is enabled for debugging
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-// Check if eventID is passed in the URL
+//check for the event ID
 if (isset($_GET['eventID'])) {
     $eventID = $_GET['eventID'];
 
-    // Fetch event details based on eventID
+    //get all details based on the eventID
     $query = "SELECT * FROM tbl_events WHERE eventID = ?";
     if ($stmt = mysqli_prepare($link, $query)) {
         mysqli_stmt_bind_param($stmt, "i", $eventID);
@@ -25,7 +21,6 @@ if (isset($_GET['eventID'])) {
         $result = mysqli_stmt_get_result($stmt);
         
         if ($event = mysqli_fetch_assoc($result)) {
-            // Event data fetched successfully
         } else {
             echo "<p>Event not found.</p>";
             exit;
@@ -39,18 +34,16 @@ if (isset($_GET['eventID'])) {
     exit;
 }
 
-// RSVP functionality
+//RSVP button functionality
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['rsvp'])) {
-    // Check if user has already RSVP'd in the session
+    //check session if user has already rsvpd
     if (!isset($_SESSION['rsvp'][$eventID])) {
-        // Update number of attendees
+        //add one to the number of attendees
         $query = "UPDATE tbl_events SET numAttendees = numAttendees + 1 WHERE eventID = ?";
         if ($stmt = mysqli_prepare($link, $query)) {
             mysqli_stmt_bind_param($stmt, "i", $eventID);
             if (mysqli_stmt_execute($stmt)) {
-               // echo '<p class="success-message">RSVP Updated Successfully!</p>';
                 echo '<p class="alert alert-success">RSVP Updated Successfully!</p>';
-                // Set session variable to prevent multiple RSVPs
                 $_SESSION['rsvp'][$eventID] = true;
             } else {
                 echo '<p class="alert alert-danger">Error updating attendees.</p>';
@@ -62,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['rsvp'])) {
 }
 
 
-// Retrieve current number of attendees
+//update number of attendees after button pressed
 $query = "SELECT numAttendees FROM tbl_events WHERE eventID = ?";
 $numAttendees = null;
 if ($stmt = mysqli_prepare($link, $query)) {
@@ -93,17 +86,12 @@ if ($stmt = mysqli_prepare($link, $query)) {
         <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true): ?>
             <p><strong>Attendees:</strong> <?php echo isset($numAttendees) ? htmlspecialchars($numAttendees) : "0"; ?></p>
         <?php endif; ?>
-       
             <form method="post">
                 <button type="submit" name="rsvp" class="btn btn-primary">RSVP</button>
             </form>
-
-
-        <!-- File Download -->
         <?php if ($event['eventFile']): ?>
             <a href="downloadFile.php?eventID=<?php echo $eventID; ?>" class="btn btn-success mt-3">Download Event File</a>
         <?php endif; ?>
-
         <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true): ?>
             <a href="updateEvent.php?eventID=<?php echo $eventID; ?>" class="btn btn-success mt-3">Update Event</a>
             <a href="cancelEvent.php?eventID=<?php echo $eventID; ?>" class="btn btn-danger mt-3">Cancel Event</a>

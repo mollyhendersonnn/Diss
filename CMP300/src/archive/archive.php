@@ -1,16 +1,17 @@
 <?php
-// Start the session
+//start the session if there isnt one detected
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-
 include_once("../connection.php");
-include_once("../navigation.php");  
+include_once("../navigation.php"); 
+include_once("../clean.php");
 
+//success message if previous action was completed successfully
 if (!empty($_SESSION['success_message'])) {
     echo "<p class='alert alert-success'>" . $_SESSION['success_message'] . "</p>";
-    unset($_SESSION['success_message']); // Clear the message after displaying
+    unset($_SESSION['success_message']); 
 }
 ?>
 
@@ -28,12 +29,10 @@ if (!empty($_SESSION['success_message'])) {
 
 <body>
     <?php
-    // Check if the user is logged in and session variables exist
+    //get the archived events from the db
     if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-        // Correct the query syntax
         $query = "SELECT * FROM tbl_archive ORDER BY eventStart ASC";
         if ($stmt = mysqli_prepare($link, $query)) {
-            // Execute the query
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
         } else {
@@ -48,42 +47,39 @@ if (!empty($_SESSION['success_message'])) {
         <table class="table table-bordered table-striped">
             <thead class="thead-dark">
                 <tr>
-                    <!-- Define static column headers -->
                     <th>Event Title</th>
                     <th>Event Type</th>
+                    <th>Event Start</th>
                 </tr>
             </thead>
             <tbody id="eventTableBody">
                 <?php
-                // Display only the required columns
+                // column headers
                 if ($result && mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo "<tr>";
                         echo "<td><a href='archiveEventDetails.php?eventID=" . htmlspecialchars($row['eventID']) . "'>" . htmlspecialchars($row['eventTitle']) . "</a></td>";
                         echo "<td>" . htmlspecialchars($row['eventType']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['eventStart']) . "</td>";
                         echo "</tr>";
                     }
                 } else {
                     echo "<tr><td colspan='2'>No results found.</td></tr>";
                 }
 
-                // Function to delete expired events
+               //deleting events over 12 months old
                 function deleteExpiredEvents($link) {
-                    $currentDate = date("Y-m-d H:i:s");
                     $twelveMonthsAgo = date("Y-m-d H:i:s", strtotime("-12 months"));
 
-                    // Prepare the SQL query to delete events
                     $query = "DELETE FROM tbl_archive WHERE eventEnd < ?";
                     if ($stmt = mysqli_prepare($link, $query)) {
                         mysqli_stmt_bind_param($stmt, "s", $twelveMonthsAgo);
-                        mysqli_stmt_execute($stmt); // Execute the deletion query
+                        mysqli_stmt_execute($stmt);
                         mysqli_stmt_close($stmt);
                     } else {
                         echo "Database query preparation failed: " . mysqli_error($link);
                     }
                 }
-
-                // Call the function to update event states
                 deleteExpiredEvents($link);
                 ?>
             </tbody>
@@ -92,7 +88,10 @@ if (!empty($_SESSION['success_message'])) {
 </body>
 </html>
 
+
+
 <script>
+    //javascript for the search bar filter
     document.addEventListener('DOMContentLoaded', function () {
         const searchBar = document.getElementById('searchBar');
         const tableBody = document.getElementById('eventTableBody');
@@ -100,21 +99,15 @@ if (!empty($_SESSION['success_message'])) {
 
         searchBar.addEventListener('keyup', function () {
             const filter = searchBar.value.toLowerCase();
-
-            // Loop through all table rows
             for (let row of rows) {
                 const cells = row.getElementsByTagName('td');
                 let match = false;
-
-                // Check if any cell in the row contains the filter text
                 for (let cell of cells) {
                     if (cell.textContent.toLowerCase().indexOf(filter) > -1) {
                         match = true;
                         break;
                     }
                 }
-
-                // Toggle the row's visibility based on match status
                 row.style.display = match ? '' : 'none';
             }
         });

@@ -47,7 +47,7 @@ body {
 .input-content {
     width: 300px;
     height: 52px;
-  }
+}
 
 /* Header and Navigation Bar */
 .header-banner {
@@ -182,7 +182,6 @@ button:hover, .btn:hover {
     font-size: 12px; 
     color: var(--black);
     height: 80px; 
-    font-weight: bold;
 }
 
 .table-calendar td {
@@ -199,11 +198,9 @@ button:hover, .btn:hover {
     top: 5px;
     left: 5px;
     font-size: 14px;
-    font-weight: bold;
     color: var(--black);
 }
 
-/* Numeric event indicator */
 .event-indicator {
     position: absolute;
     top: 5px;
@@ -211,10 +208,11 @@ button:hover, .btn:hover {
     background-color: var(--core-purple1);
     color: white;
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
+    width: 26;
+    height: 26;
     text-align: center;
-    font-size: 12px;
+    padding: 1%;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
 }
@@ -233,11 +231,11 @@ button:hover, .btn:hover {
     white-space: nowrap;
     z-index: 10;
     border-radius: 5px;
-    color: black; /* Ensure text is visible */
-    background-color: white; /* Proper contrast */
+    color: black; 
+    background-color: white; 
     padding: 5px;
     border-radius: 5px;
-    text-decoration: none; /* Remove underline */
+    text-decoration: none;
 }
 
 .table-calendar th {
@@ -260,9 +258,8 @@ button:hover, .btn:hover {
 .table-calendar td.date-picker.selected {
     background-color: var(--core-purple2);
     color: var(--white);
-    font-weight: bold;
+    
 }
-
 
 #monthAndYear {
     text-align: center;
@@ -274,6 +271,12 @@ button:hover, .btn:hover {
 
 
 @media screen and (max-width: 768px) {
+
+    .navigation ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+
     .table-calendar {
         width: 100%; 
     }
@@ -289,7 +292,6 @@ button:hover, .btn:hover {
         font-size: 20px;
     }
 }
-
 
 /* Footer */
 .footer-container-calendar {
@@ -309,18 +311,4 @@ button:hover, .btn:hover {
 
 .footer-container-calendar select:hover {
     border-color: var(--core-purple1);
-}
-
-/* Responsive Design */
-@media screen and (max-width: 768px) {
-    .navigation ul {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .table-calendar th,
-    .table-calendar td {
-        font-size: 12px;
-        padding: 8px;
-    }
 }

@@ -1,22 +1,18 @@
 <?php
-// Start the session
+//start the session if there isnt one detected
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Include database connection
-include_once("connection.php");
-include_once("navigation.php");
-//include_once("audit.php");
-
-//header(header: "Refresh:3");
+include_once("../connection.php");
+include_once("../navigation.php"); 
+include_once("../clean.php"); 
 
 if (!empty($_SESSION['success_message'])) {
     echo "<p class='alert alert-success'>" . $_SESSION['success_message'] . "</p>";
-    unset($_SESSION['success_message']); // Clear the message after displaying
+    unset($_SESSION['success_message']); 
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -33,11 +29,10 @@ if (!empty($_SESSION['success_message'])) {
 <body>
     <?php
 
-// Initialize the result variable
 $result = null;
 
 
-// Check if the user is logged in and session variables exist
+//check user is logged in and if session variables exist
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     if (!empty($_SESSION["groupID"])) {
         $query = "SELECT eventID, eventTitle, eventType, eventStart 
@@ -50,7 +45,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
             die("Query binding failed: " . mysqli_error($link));
         }
     } else {
-        // If the user is logged in but has no group, fetch all active events
+        //if the user is logged in but has no group, fetch all active events
         $query = "SELECT eventID, eventTitle, eventType, eventStart 
                   FROM tbl_events WHERE stateID = 1 ORDER BY eventStart ASC";
         $result = mysqli_query($link, $query);
@@ -59,7 +54,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         }
     }
 } else {
-    // If the user is not logged in, fetch all active events
+    //if the user is not logged in, fetch all active events
     $query = "SELECT eventID, eventTitle, eventType, eventStart 
               FROM tbl_events WHERE stateID = 1 ORDER BY eventStart ASC";
     $result = mysqli_query($link, $query);
@@ -77,7 +72,6 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         <table class="table table-bordered table-striped">
         <thead class="thead-dark">
     <tr>
-        <!-- Define static column headers -->
         <th>Event Title</th>
         <th>Event Type</th>
         <th>Start Date</th>
@@ -85,7 +79,6 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 </thead>
 <tbody id="eventTableBody">
     <?php
-    // Display only the required columns
     if ($result && mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
 
@@ -103,12 +96,11 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     }
 
 
-    
+    //function to put events in DB if the end time has elapsed
     function archiveExpiredEvents($link) {
         $currentDate = date("Y-m-d H:i:s");
         $archiveReason = 1;
     
-        // Insert expired events into tbl_archive
         $sql = "
         INSERT INTO `tbl_archive` (`eventID`, `stateID`, `groupID`, `userID`, `eventTitle`, `eventType`, `eventStart`, `eventEnd`, `numAttendees`)
         SELECT eventID, stateID, groupID, userID, eventTitle, eventType, eventStart, eventEnd, numAttendees
@@ -126,7 +118,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
             echo "Query prep failed for archive: " . mysqli_error($link);
         }
     
-        // Delete the archived events from tbl_events
+        //delete the archived events from tbl_events if successfully added to tbl_archive
         $deleteQuery = "DELETE FROM tbl_events WHERE eventEnd < ?";
     
         if ($stmt = mysqli_prepare($link, $deleteQuery)) {
@@ -139,9 +131,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
             echo "Query prep failed: " . mysqli_error($link);
         }
     }
-    
-    
-    // Call the function to update event states
+
     archiveExpiredEvents($link);
     ?>
 
@@ -152,6 +142,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 </body>
 </html>
 <script>
+    //search functionality
     document.addEventListener('DOMContentLoaded', function () {
         const searchBar = document.getElementById('searchBar');
         const tableBody = document.getElementById('eventTableBody');
@@ -160,12 +151,10 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         searchBar.addEventListener('keyup', function () {
             const filter = searchBar.value.toLowerCase();
 
-            // Loop through all table rows
             for (let row of rows) {
                 const cells = row.getElementsByTagName('td');
                 let match = false;
 
-                // Check if any cell in the row contains the filter text
                 for (let cell of cells) {
                     if (cell.textContent.toLowerCase().indexOf(filter) > -1) {
                         match = true;
@@ -173,7 +162,6 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
                     }
                 }
 
-                // Toggle the row's visibility based on match status
                 row.style.display = match ? '' : 'none';
             }
         });

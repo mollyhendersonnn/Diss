@@ -1,17 +1,18 @@
 <?php
+//start the session if there isnt one detected
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 include_once("../connection.php");
-include_once("../navigation.php");  
+include_once("../navigation.php"); 
+include_once("../clean.php"); 
 
-
-// Check if enterpriseID is passed in the URL
+//Check if userID is passed thorugh URL
 if (isset($_GET['userID'])) {
     $userID = $_GET['userID'];
 
-    // Fetch user details based on enterpriseID
+    //get user details based on userID, use the plaintext of group and role instead of ID stored in DB
     $query = "SELECT u.userID, u.enterpriseID, u.firstName, u.groupID, u.roleID, r.roleName, g.groupName
               FROM tbl_users u 
               INNER JOIN tbl_roles r ON u.roleID = r.roleID
@@ -24,7 +25,6 @@ if (isset($_GET['userID'])) {
         $result = mysqli_stmt_get_result($stmt);
         
         if ($user = mysqli_fetch_assoc($result)) {
-            // Fetching groupName and roleName from the query result
             $groupName = $user['groupName'];
             $roleName = $user['roleName'];
         } else {

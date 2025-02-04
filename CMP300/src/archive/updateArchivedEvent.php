@@ -1,27 +1,28 @@
 <?php
-// Start the session
+//start the session if there isnt one detected
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 include_once("../connection.php");
-include_once("../navigation.php");  
+include_once("../navigation.php"); 
+include_once("../clean.php"); 
 
-// Check if the user is logged in
+//check if user is logged in
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     echo json_encode(["success" => false, "message" => "You must be logged in to update an archived event."]);
     exit;
 }
 
-// Check if eventID is provided
+//check if event ID is provided in URL
 if (!isset($_GET['eventID'])) {
     echo json_encode(["success" => false, "message" => "No event ID provided."]);
     exit;
 }
-
+//assign it to a variable
 $eventID = $_GET['eventID'];
 
-// Fetch the archived event details
+//get the archive event details based on the eventID
 $query = "SELECT * FROM tbl_archive WHERE eventID = ?";
 if ($stmt = mysqli_prepare($link, $query)) {
     mysqli_stmt_bind_param($stmt, "i", $eventID);
@@ -34,7 +35,7 @@ if ($stmt = mysqli_prepare($link, $query)) {
     exit;
 }
 
-// Handle form submission
+//form submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $eventTitle = htmlspecialchars(trim($_POST["eventTitle"]));
     $eventType = $_POST["eventType"];
@@ -47,13 +48,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $numAttendees = htmlspecialchars(trim($_POST["numAttendees"]));
 
 
-    // Handling Time Validation
+    //check if the end time behind the start time
     if (strtotime(datetime: $eventEnd) <= strtotime($eventStart)) {
         echo '<p class="alert alert-danger">End Date or Time in Past</p>';
         } else {
             $query= "UPDATE tbl_archive SET eventTitle = ? , eventType = ? , eventStart = ? , eventEnd = ? , eventFeedback = ? , eventCost = ? , numAttendees = ?  WHERE eventID = ?";
-           
-
             if ($stmt = mysqli_prepare($link, $query)) {
                 mysqli_stmt_bind_param($stmt, "sssssssi", $eventTitle, $eventType, $eventStart, $eventEnd, $eventFeedback, $eventCost, $numAttendees, $eventID);
                
@@ -69,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
-    // Display the form if the request method is not POST
+    //show the form
     ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -95,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <option value="" selected="" disabled="">Select an Event Type</option>
                     <option value="Lunch and Learns" <?php echo $event['eventType'] == "Lunch and Learns" ? "selected" : ""; ?>>Lunch & Learns</option>
                     <option value="Town Halls" <?php echo $event['eventType'] == "Town Halls" ? "selected" : ""; ?>>Town Halls</option>
-                    <option value="Party" <?php echo $event['eventType'] == "Party" ? "selected" : ""; ?>>Party</option>
+                    <option value="Social" <?php echo $event['eventType'] == "Social" ? "selected" : ""; ?>>Social</option>
                     <option value="Newsletter" <?php echo $event['eventType'] == "Newsletter" ? "selected" : ""; ?>>Newsletter</option>
                     <option value="All Hands" <?php echo $event['eventType'] == "All Hands" ? "selected" : ""; ?>>All Hands</option>
                     <option value="Brownbag sessions" <?php echo $event['eventType'] == "Brownbag sessions" ? "selected" : ""; ?>>Brownbag sessions</option>

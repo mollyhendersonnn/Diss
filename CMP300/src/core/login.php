@@ -1,69 +1,60 @@
 <?php
-// Start the session
+//start the session if there isnt one detected
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-
 include_once("../connection.php");
-include_once("../navigation.php");  
+include_once("../navigation.php"); 
+include_once("../clean.php"); 
 
-
-
-// Initialize variables
+//assign the variables a blank string 
 $enterpriseID = $password = "";
 $enterpriseID_err = $password_err = $login_err = "";
 
-// Handle form submission
+//form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Validate enterprise ID
+    //get EID
     if (empty(trim($_POST["enterpriseID"]))) {
         $enterpriseID_err = "Please enter your Enterprise ID.";
     } else {
         $enterpriseID = trim($_POST["enterpriseID"]);
     }
 
-    // Validate password
+    //get password
     if (empty(trim($_POST["password"]))) {
         $password_err = "Please enter your password.";
     } else {
         $password = trim($_POST["password"]);
     }
 
-    // Process login if no validation errors
+    //check for errors
     if (empty($enterpriseID_err) && empty($password_err)) {
         $query = "SELECT userID, enterpriseID, password, roleID, groupID FROM tbl_users WHERE enterpriseID = ?";
         
         if ($stmt = mysqli_prepare($link, $query)) {
-            // Bind input parameters
+            //bind parameters
             mysqli_stmt_bind_param($stmt, "s", $enterpriseID);
 
-            // Execute the query
             if (mysqli_stmt_execute($stmt)) {
                 mysqli_stmt_store_result($stmt);
 
-                // Check if enterprise ID exists
+                //check EID exists
                 if (mysqli_stmt_num_rows($stmt) == 1) {
-                    // Fetch the result
+                    //get all info needed
                     mysqli_stmt_bind_result($stmt, $id, $fetchedEnterpriseID, $hashed_password, $roleID, $groupID);
                     if (mysqli_stmt_fetch($stmt)) {
-                        // Verify password
+                        //password matching
                         if (password_verify($password, $hashed_password)) {
-                            // Password is correct; set session variables
+                            //assing info to the right variables
                             $_SESSION['loggedin'] = true;
                             $_SESSION['userID'] = $id;
                             $_SESSION['enterpriseID'] = $fetchedEnterpriseID;
                             $_SESSION['roleID'] = $roleID;
                             $_SESSION['groupID'] = $groupID;
 
-                            //Audit log
-                             
-    // $userID = $_SESSION["userID"];
-    // $action = "User logged in";
-    // logAction($link, $userID, $action);
-
-                            // Redirect to the dashboard
+                            //once logged in redirect to dashboard
                             header("Location: ../dashboard.php");
                             exit();
                         } else {
@@ -78,14 +69,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
                 echo "Oops! Something went wrong. Please try again later.";
             }
-
-            // Close statement
             mysqli_stmt_close($stmt);
      
         }
     }
 
-    // Close database connection
+    //close DB connection
     mysqli_close($link);
 }
 ?>
