@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 include_once("../connection.php");
 include_once("../navigation.php"); 
-include_once("../clean.php"); 
+ 
 
 if (!empty($_SESSION['success_message'])) 
     echo "<p class='alert alert-success'>" . $_SESSION['success_message'] . "</p>";
@@ -74,11 +74,9 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
             echo "<td>" . htmlspecialchars($row['firstName']) . "</td>";
             echo "<td>" . htmlspecialchars($groupName) . "</td>";
             echo "<td>" . htmlspecialchars($roleName) . "</td>";
-            echo "</tr>";
-        }
-    } else {
-        echo "<tr><td colspan='4'>No results found.</td></tr>";
-    }
+            echo "</tr>"; }} 
+            else {
+        echo "<tr><td colspan='4'>No results found.</td></tr>"; }
     ?>
 
 </tbody>
@@ -105,13 +103,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
                 for (let cell of cells) {
                     if (cell.textContent.toLowerCase().indexOf(filter) > -1) {
                         match = true;
-                        break;
-                    }
-                }
-
+                        break;}}
                 row.style.display = match ? '' : 'none';
-            }
-        });
-    });
-
+            }});});
 </script>

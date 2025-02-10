@@ -1,12 +1,10 @@
 <?php
 //start the session if there isnt one detected
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+    session_start();}
 
-include_once("../connection.php");
-include_once("../navigation.php"); 
-include_once("../clean.php"); 
+include_once("connection.php");
+include_once("navigation.php"); 
 
 //get events from event table and the archive table
 $sql = "SELECT eventID, eventTitle, eventStart, eventEnd FROM tbl_events";
@@ -23,8 +21,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         "title" => $row['eventTitle'],
         "start" => $row['eventStart'],
         "end" => $row['eventEnd'],
-    ];
-}
+    ];}
 
 $archevents = [];
 while ($row = mysqli_fetch_assoc($resultarch)) {
@@ -33,8 +30,7 @@ while ($row = mysqli_fetch_assoc($resultarch)) {
         "title" => $row['eventTitle'],
         "start" => $row['eventStart'],
         "end" => $row['eventEnd'],
-    ];
-}
+    ];}
 
 // get UK holidays based on API
 $year = date("Y");
@@ -52,20 +48,15 @@ try {
             "title" => $holiday['title'],
             "start" => $holiday['date'],
             "end" => $holiday['date'],
-        ];
-    }
+        ];}
 } catch (Exception $e) {
-    error_log("Error fetching holidays: " . $e->getMessage());
-
-}
+    error_log("Error fetching holidays: " . $e->getMessage());}
 
 //merge all of the results
 $allEvents = array_merge($events, $archevents, $holidays);
 
-
 //giev events to javascript and sanitise JSON
 echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ";</script>";
-
 ?>
 
 
@@ -74,11 +65,9 @@ echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_H
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, 
-                initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <title>Event Calendar</title>
 </head>
 
@@ -87,11 +76,11 @@ echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_H
         <br>
         <div id="right">
         <button id="previous" aria-label="Previous Month" onclick="previous()">
-            <img src="/mollyhenderson/CMP300/src/css/images/Left_Arrow_White.png" alt="Previous Month" style="height: 35px; width: 25px;">
+            <img src="/mollyhenderson/CMP300/src/css/images/Left_Arrow_White.png" alt="Previous Month" style="height: 30px; width: 20px;">
         </button>
         <h3 id="monthAndYear"></h3>
         <button id="next" aria-label="Next Month" onclick="next()">
-            <img src="/mollyhenderson/CMP300/src/css/images/Right_Arrow_White.png" alt="Next Month" style="height: 35px; width: 25px;">
+            <img src="/mollyhenderson/CMP300/src/css/images/Right_Arrow_White.png" alt="Next Month" style="height: 30px; width: 20px;">
         </button>
         </div>
     </div>
@@ -117,15 +106,12 @@ echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_H
                 <option value=10>Nov</option>
                 <option value=11>Dec</option>
             </select>
-
             <select id="year" onchange="jump()"></select>
         </div>
     </div>
     </div>
     </div>
-
 </body>
-
 </html>
 
 <script>
@@ -134,10 +120,8 @@ echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_H
         let years = "";
         for (let year = start; year <= end; year++) {
             years += "<option value='" +
-                year + "'>" + year + "</option>";
-        }
-        return years;
-    }
+                year + "'>" + year + "</option>";}
+        return years; }
 
     //get date variables
     today = new Date();
@@ -162,19 +146,17 @@ echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_H
         "September",
         "October",
         "November",
-        "December"
-    ];
+        "December" ];
     
     let days = [
-        "Sun", "Mon", "Tue", "Wed",
-        "Thu", "Fri", "Sat"];
+         "Mon", "Tue", "Wed",
+        "Thu", "Fri", "Sat", "Sun"];
 
     let dataHead = "<tr>";
     for (dhead in days) {
         dataHead += "<th data-days='" +
             days[dhead] + "'>" +
-            days[dhead] + "</th>";
-    }
+            days[dhead] + "</th>"; }
     dataHead += "</tr>";
 
     document.getElementById("thead-month").innerHTML = dataHead;
@@ -188,8 +170,7 @@ echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_H
         currentYear = currentMonth === 11 ?
             currentYear + 1 : currentYear;
         currentMonth = (currentMonth + 1) % 12;
-        showCalendar(currentMonth, currentYear);
-    }
+        showCalendar(currentMonth, currentYear); }
 
     //go to prev month
     function previous() {
@@ -197,15 +178,13 @@ echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_H
             currentYear - 1 : currentYear;
         currentMonth = currentMonth === 0 ?
             11 : currentMonth - 1;
-        showCalendar(currentMonth, currentYear);
-    }
+        showCalendar(currentMonth, currentYear); }
 
     //go to specific month and year
     function jump() {
         currentYear = parseInt(selectYear.value);
         currentMonth = parseInt(selectMonth.value);
-        showCalendar(currentMonth, currentYear);
-    }
+        showCalendar(currentMonth, currentYear);  }
 
     //actual calendar function
     function showCalendar(month, year) {
@@ -243,8 +222,7 @@ echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_H
                 const eventsForDay = dbEvents.filter(event => {
                     const startDate = new Date(event.start).toISOString().split("T")[0];
                     const endDate = new Date(event.end).toISOString().split("T")[0];
-                    return cellDate >= startDate && cellDate <= endDate;
-                });
+                    return cellDate >= startDate && cellDate <= endDate;});
 
                 // show events in a number indicator
                 if (eventsForDay.length > 0) {
@@ -266,71 +244,56 @@ echo "<script>const dbEvents = " . json_encode($allEvents, JSON_HEX_TAG | JSON_H
                      
                         return `<div class='tooltip-item'>
                                     <a href='events/eventDetails.php?eventID=${event.id}' class='event-link'>${event.title}</a>
-                                </div>`;
-                      } else if (event.idarch) {
-                       
+                                </div>`;} else if (event.idarch) {                      
                         return `<div class='tooltip-item'>
                                     <a href='archive/archiveEventDetails.php?eventID=${event.idarch}' class='event-link'>${event.title}</a>
                                 </div>`;
-                       //if from API dont make it clickable         
-                     } else if (event.idhol) {
-            
-                        return `<div class='tooltip-item'>${event.title}</div>`;
-                    }
+                       //if from API dont make it clickable        
+                        } else if (event.idhol) {            
+                        return `<div class='tooltip-item'>${event.title}</div>`; }
                      }).join("<br>");
                     
-
                     //show tooltip only if hovered
                     let tooltipVisible = false;
 
+                    //make timout a variable
+                    let hideTimeout; 
 
-                    //hover event listeners
-                    eventIndicator.addEventListener("mouseover", function () {
-                        tooltip.style.display = "block";
-                        tooltipVisible = true;
-                    });
-                    eventIndicator.addEventListener("mouseout", function () {
-                        if (!tooltip.matches(':hover')) {
-                        tooltip.style.display = "none";
-                        tooltipVisible = false;
-                    }
-                    });
+                        eventIndicator.addEventListener("mouseover", function () {
+                            tooltip.style.display = "block";
+                            tooltipVisible = true; });
 
-                    tooltip.addEventListener("mouseover", function () {
-                    tooltip.style.display = "block"; 
-                    });
+                        eventIndicator.addEventListener("mouseout", function () {
+                            hideTimeout = setTimeout(() => {
+                                if (!tooltip.matches(':hover')) {
+                                    tooltip.style.display = "none";
+                                    tooltipVisible = false;}}, 2000); });
 
-                    tooltip.addEventListener("mouseout", function () {
-                     // Only hide the tooltip if the mouse is not over the event indicator or the tooltip itself
-                      if (!eventIndicator.matches(':hover')) {
-                        tooltip.style.display = "none";
-                        tooltipVisible = false;
-                        }});
+                        tooltip.addEventListener("mouseover", function () {
+                            clearTimeout(hideTimeout); 
+                            tooltip.style.display = "block"; });
+
+                        tooltip.addEventListener("mouseout", function () {
+                            hideTimeout = setTimeout(() => {
+                                tooltip.style.display = "none";
+                                tooltipVisible = false; }, 2000);  });
 
                     //assign the tooltip to the cell
-                    cell.appendChild(tooltip);
-                }
+                    cell.appendChild(tooltip); }
 
                 //highlight todays date in purple
                 if (
                     date === today.getDate() &&
                     year === today.getFullYear() &&
                     month === today.getMonth()
-                ) {
-                    cell.classList.add("selected");
-                }
+                ) { cell.classList.add("selected"); }
 
                 row.appendChild(cell);
-                date++;
-            }
-        }
-        tbl.appendChild(row);
-    }
-}
+                date++; } }
+        tbl.appendChild(row); }}
 
 //daysInMonth function
 function daysInMonth(month, year) {
-    return new Date(year, month + 1, 0).getDate();
-}
+    return new Date(year, month + 1, 0).getDate();}
 
 </script>

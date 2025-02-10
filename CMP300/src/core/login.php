@@ -1,12 +1,11 @@
 <?php
 //start the session if there isnt one detected
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+    session_start();}
 
 include_once("../connection.php");
 include_once("../navigation.php"); 
-include_once("../clean.php"); 
+ 
 
 //assign the variables a blank string 
 $enterpriseID = $password = "";
@@ -19,8 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["enterpriseID"]))) {
         $enterpriseID_err = "Please enter your Enterprise ID.";
     } else {
-        $enterpriseID = trim($_POST["enterpriseID"]);
-    }
+        $enterpriseID = trim($_POST["enterpriseID"]);}
 
     //get password
     if (empty(trim($_POST["password"]))) {
@@ -32,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //check for errors
     if (empty($enterpriseID_err) && empty($password_err)) {
         $query = "SELECT userID, enterpriseID, password, roleID, groupID FROM tbl_users WHERE enterpriseID = ?";
-        
+
         if ($stmt = mysqli_prepare($link, $query)) {
             //bind parameters
             mysqli_stmt_bind_param($stmt, "s", $enterpriseID);
@@ -58,22 +56,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             header("Location: ../dashboard.php");
                             exit();
                         } else {
-                            $login_err = "Invalid password.";
-                        }
-                    }
+                            $login_err = "Invalid Enterprise ID or password.";}}
                 } else {
-                    $login_err = "No account found with that Enterprise ID.";
-                   
-                }
+                    $login_err = "Invalid Enterprise ID or password.";}
             } else {
-    
-                echo "Oops! Something went wrong. Please try again later.";
-            }
-            mysqli_stmt_close($stmt);
-     
-        }
-    }
-
+                echo "Oops! Something went wrong. Please try again later.";}
+            mysqli_stmt_close($stmt);}}
     //close DB connection
     mysqli_close($link);
 }
@@ -93,34 +81,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <div class="login-container">
-
         <?php 
         if (!empty($login_err)) {
-            echo '<div class="alert alert-danger corner-alert">' . $login_err . '</div>';
-        }
-        ?>
-
+            echo '<div class="alert alert-danger corner-alert">' . $login_err . '</div>'; }?>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <h2>Login</h2>
             <br>
-            
             <div class="form-group content <?php echo (!empty($enterpriseID_err)) ? 'has-error' : ''; ?>">
                 <label for="enterpriseID">Enterprise ID</label>
                 <input type="text" id="enterpriseID" placeholder="example@domain.com" name="enterpriseID" class="form-control input.custom" value="<?php echo htmlspecialchars($enterpriseID); ?>">
                 <span class="help-block"><?php echo $enterpriseID_err; ?></span>
             </div> 
-
             <div class="form-group content <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" class="form-control input.custom">
                 <span class="help-block"><?php echo $password_err; ?></span>
             </div>
-
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Login">
             </div>
         </form>
     </div>
 </body>
-
 </html>

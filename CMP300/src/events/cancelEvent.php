@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 include_once("../connection.php");
 include_once("../navigation.php"); 
-include_once("../clean.php"); 
+ 
 
 //check the user is logged in
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
@@ -61,18 +61,14 @@ if ($stmt = mysqli_prepare($link, $query)) {
                 exit();
 
             } else {
-                echo json_encode(["success" => false, "message" => "Failed to delete the event."]);
-            }
-            mysqli_stmt_close($deleteStmt);
-        } else {
+                echo json_encode(["success" => false, "message" => "Failed to delete the event."]); }
+            mysqli_stmt_close($deleteStmt); } 
+            else {
             echo json_encode(["success" => false, "message" => "Failed to prepare delete query."]);
-        }
-    } else {
+        }} else {
         echo json_encode(["success" => false, "message" => "Failed to archive the event."]);
     }
     mysqli_stmt_close($stmt);
 } else {
-    echo json_encode(["success" => false, "message" => "Failed to prepare archive query."]);
-}
-
+    echo json_encode(["success" => false, "message" => "Failed to prepare archive query."]);}
 ?>

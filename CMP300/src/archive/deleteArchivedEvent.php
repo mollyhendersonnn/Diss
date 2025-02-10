@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 include_once("../connection.php");
-include_once("../clean.php");
+//include_once("../clean.php");
 
 //is user logged in in the session
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
@@ -31,16 +31,12 @@ if ($stmt = mysqli_prepare($link, $query)) {
         if (mysqli_stmt_affected_rows($stmt) > 0) {
             $_SESSION['success_message'] = "Event Deleted Successfully!";
             header("Location: archive.php");
-            exit();
-        } else {
-            echo json_encode(["success" => false, "message" => "Event not found or already deleted."]);
-        }
+            exit();} 
+            else {
+            echo json_encode(["success" => false, "message" => "Event not found or already deleted."]);}
     } else {
-        echo json_encode(["success" => false, "message" => "Failed to delete the archived event."]);
-    }
+        echo json_encode(["success" => false, "message" => "Failed to delete the archived event."]);}
     mysqli_stmt_close($stmt);
 } else {
-    echo json_encode(["success" => false, "message" => "Failed to prepare delete query."]);
-}
-
+    echo json_encode(["success" => false, "message" => "Failed to prepare delete query."]); }
 ?>

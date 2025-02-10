@@ -1,24 +1,20 @@
 <?php
 //start the session if there isnt one detected
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+    session_start();}
 
 include_once("../connection.php");
 include_once("../navigation.php"); 
-include_once("../clean.php"); 
-
+ 
 //check the user is logged in
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     echo json_encode(["success" => false, "message" => "Please log-in to update events."]);
-    exit;
-}
+    exit;}
 
 //check eventID is there
 if (!isset($_GET['eventID'])) {
     echo json_encode(["success" => false, "message" => "Error getting the EventID."]);
-    exit;
-}
+    exit;}
 
 //store the eventID as a variable
 $eventID = $_GET['eventID'];
@@ -33,8 +29,7 @@ if ($stmt = mysqli_prepare($link, $query)) {
     mysqli_stmt_close($stmt);
 } else {
     echo json_encode(["success" => false, "message" => "Failed to get all the events."]);
-    exit;
-}
+    exit; }
 
 //form submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -56,8 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         //if there is no new file then retain the current file 
         $imageContent = $event['eventFile'];
-        $mimeType = $event['fileType'];
-    }
+        $mimeType = $event['fileType'];}
 
     //ensure start date is before end date
     if (strtotime($eventEnd) <= strtotime($eventStart)) {
@@ -72,12 +66,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 header("Location: ../dashboard.php");
                 exit();
             } else {
-                echo "<p>Error executing query: " . mysqli_error($link) . "</p>";
-            }
-            mysqli_stmt_close($stmt);
-        }
-    }
-}
+                echo "<p>Error executing query: " . mysqli_error($link) . "</p>"; }
+            mysqli_stmt_close($stmt); }}}
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -36,9 +36,7 @@ if (!empty($_SESSION['success_message'])) {
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
         } else {
-            die("Database query preparation failed: " . mysqli_error($link));
-        }
-    }
+            die("Database query preparation failed: " . mysqli_error($link));}}
     ?>
 
     <div class="container mt-5">
@@ -62,10 +60,7 @@ if (!empty($_SESSION['success_message'])) {
                         echo "<td>" . htmlspecialchars($row['eventType']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['eventStart']) . "</td>";
                         echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='2'>No results found.</td></tr>";
-                }
+                    }} else { echo "<tr><td colspan='2'>No results found.</td></tr>";}
 
                //deleting events over 12 months old
                 function deleteExpiredEvents($link) {
@@ -77,9 +72,7 @@ if (!empty($_SESSION['success_message'])) {
                         mysqli_stmt_execute($stmt);
                         mysqli_stmt_close($stmt);
                     } else {
-                        echo "Database query preparation failed: " . mysqli_error($link);
-                    }
-                }
+                        echo "Database query preparation failed: " . mysqli_error($link); }}
                 deleteExpiredEvents($link);
                 ?>
             </tbody>
@@ -87,8 +80,6 @@ if (!empty($_SESSION['success_message'])) {
     </div>
 </body>
 </html>
-
-
 
 <script>
     //javascript for the search bar filter
@@ -106,10 +97,7 @@ if (!empty($_SESSION['success_message'])) {
                     if (cell.textContent.toLowerCase().indexOf(filter) > -1) {
                         match = true;
                         break;
-                    }
-                }
-                row.style.display = match ? '' : 'none';
-            }
-        });
+                    }}
+                row.style.display = match ? '' : 'none'; }});
     });
 </script>

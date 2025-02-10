@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 include_once("../connection.php");
 include_once("../navigation.php"); 
-include_once("../clean.php"); 
+ 
 
 //Check if userID is passed thorugh URL
 if (isset($_GET['userID'])) {

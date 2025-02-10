@@ -9,7 +9,7 @@ $_SESSION = array();
 session_destroy();
 
 //redirect to dashboard
-header("location: dashboard.php");
+header("location: ../dashboard.php");
 
 exit
     ?>
