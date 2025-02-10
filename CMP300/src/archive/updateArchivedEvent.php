@@ -6,19 +6,17 @@ if (session_status() === PHP_SESSION_NONE) {
 
 include_once("../connection.php");
 include_once("../navigation.php"); 
-include_once("../clean.php"); 
+ 
 
 //check if user is logged in
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     echo json_encode(["success" => false, "message" => "You must be logged in to update an archived event."]);
-    exit;
-}
+    exit;}
 
 //check if event ID is provided in URL
 if (!isset($_GET['eventID'])) {
     echo json_encode(["success" => false, "message" => "No event ID provided."]);
-    exit;
-}
+    exit;}
 //assign it to a variable
 $eventID = $_GET['eventID'];
 
@@ -32,8 +30,7 @@ if ($stmt = mysqli_prepare($link, $query)) {
     mysqli_stmt_close($stmt);
 } else {
     echo json_encode(["success" => false, "message" => "Failed to fetch archived event details."]);
-    exit;
-}
+    exit;}
 
 //form submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -61,12 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                    header("Location: archive.php");
                    exit();
                 } else {
-                    echo json_encode(["success" => false, "message" => "Failed to update archived event."]);
-                }
-                mysqli_stmt_close($stmt);
-            }
-        }
-    }
+                    echo json_encode(["success" => false, "message" => "Failed to update archived event."]); }
+                mysqli_stmt_close($stmt); }}}
+   
 
     //show the form
     ?>

@@ -1,17 +1,15 @@
 <?php
 //start the session if there isnt one detected
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+    session_start();}
 
-include_once("../connection.php");
-include_once("../navigation.php"); 
-include_once("../clean.php"); 
+include_once("connection.php");
+include_once("navigation.php"); 
+ 
 
 if (!empty($_SESSION['success_message'])) {
     echo "<p class='alert alert-success'>" . $_SESSION['success_message'] . "</p>";
-    unset($_SESSION['success_message']); 
-}
+    unset($_SESSION['success_message']); }
 ?>
 
 <!DOCTYPE html>
@@ -27,10 +25,9 @@ if (!empty($_SESSION['success_message'])) {
 </head>
 
 <body>
-    <?php
 
+<?php
 $result = null;
-
 
 //check user is logged in and if session variables exist
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
@@ -40,28 +37,24 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         if ($stmt = mysqli_prepare($link, $query)) {
             mysqli_stmt_bind_param($stmt, "i", $_SESSION["groupID"]);
             mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-        } else {
-            die("Query binding failed: " . mysqli_error($link));
-        }
-    } else {
+            $result = mysqli_stmt_get_result($stmt);}
+            else {
+            die("Query binding failed: " . mysqli_error($link)); }} 
+            else {
         //if the user is logged in but has no group, fetch all active events
         $query = "SELECT eventID, eventTitle, eventType, eventStart 
                   FROM tbl_events WHERE stateID = 1 ORDER BY eventStart ASC";
         $result = mysqli_query($link, $query);
         if ($result === false) {
-            die("SQL failed: " . mysqli_error($link));
-        }
-    }
-} else {
+            die("SQL failed: " . mysqli_error($link));}}} 
+            else {
     //if the user is not logged in, fetch all active events
     $query = "SELECT eventID, eventTitle, eventType, eventStart 
               FROM tbl_events WHERE stateID = 1 ORDER BY eventStart ASC";
     $result = mysqli_query($link, $query);
     if ($result === false) {
         die("SQL failed: " . mysqli_error($link));
-    }
-}
+    }}
 ?>
     <div class="container mt-5">
         <h2 class="mb-4">Events</h2>
@@ -89,13 +82,10 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
             echo "<td><a href='events/eventDetails.php?eventID=" . htmlspecialchars($row['eventID']) . "'>" . htmlspecialchars($row['eventTitle']) . "</a></td>";
             echo "<td>" . htmlspecialchars($row['eventType']) . "</td>";
             echo "<td>" . $formattedDate . "</td>";
-            echo "</tr>";
-        }
+            echo "</tr>"; }
     } else {
-        echo "<tr><td colspan='4'>No results found.</td></tr>";
-    }
-
-
+        echo "<tr><td colspan='4'>No results found.</td></tr>"; }
+    
     //function to put events in DB if the end time has elapsed
     function archiveExpiredEvents($link) {
         $currentDate = date("Y-m-d H:i:s");
@@ -111,12 +101,9 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         if ($stmt = mysqli_prepare($link, $sql)) {
             mysqli_stmt_bind_param($stmt, "s", $currentDate);
             if (!mysqli_stmt_execute($stmt)) {
-                echo "Error archiving events: " . mysqli_error($link);
-            }
+                echo "Error archiving events: " . mysqli_error($link); }
             mysqli_stmt_close($stmt);
-        } else {
-            echo "Query prep failed for archive: " . mysqli_error($link);
-        }
+        } else { echo "Query prep failed for archive: " . mysqli_error($link); }
     
         //delete the archived events from tbl_events if successfully added to tbl_archive
         $deleteQuery = "DELETE FROM tbl_events WHERE eventEnd < ?";
@@ -124,14 +111,9 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         if ($stmt = mysqli_prepare($link, $deleteQuery)) {
             mysqli_stmt_bind_param($stmt, "s", $currentDate);
             if (!mysqli_stmt_execute($stmt)) {
-                echo "Error deleting events: " . mysqli_error($link);
-            }
+                echo "Error deleting events: " . mysqli_error($link); }
             mysqli_stmt_close($stmt);
-        } else {
-            echo "Query prep failed: " . mysqli_error($link);
-        }
-    }
-
+         } else { echo "Query prep failed: " . mysqli_error($link);}}
     archiveExpiredEvents($link);
     ?>
 
@@ -158,13 +140,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
                 for (let cell of cells) {
                     if (cell.textContent.toLowerCase().indexOf(filter) > -1) {
                         match = true;
-                        break;
-                    }
-                }
-
-                row.style.display = match ? '' : 'none';
-            }
-        });
-    });
+                        break; }}
+                row.style.display = match ? '' : 'none';} }); });
 
 </script>

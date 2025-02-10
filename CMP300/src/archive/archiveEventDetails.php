@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 include_once("../connection.php");
 include_once("../navigation.php"); 
-include_once("../clean.php"); 
+ 
 
 //get eventID from url
 if (isset($_GET['eventID'])) {

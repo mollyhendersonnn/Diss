@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 include_once("../connection.php");
 include_once("../navigation.php"); 
-include_once("../clean.php"); 
+ 
 
 //define the variables to empty strings
 $username = $password = $firstname = $roleID = $groupID = "";
@@ -74,24 +74,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             header("Location: users.php");
                             exit();
                         } else {
-                            echo "<div class='alert alert-danger'>Error: " . mysqli_stmt_error($stmt_insert) . "</div>";
-                        }
-
-                        mysqli_stmt_close($stmt_insert);
-                    }
-                }
+                            echo "<div class='alert alert-danger'>Error: " . mysqli_stmt_error($stmt_insert) . "</div>";}
+                        mysqli_stmt_close($stmt_insert); }}
                 mysqli_stmt_close($stmt);
             } else {
                 echo "<div class='alert alert-danger'>Error executing query: " . mysqli_error($link) . "</div>";
-            }
-        } else {
+            }} else {
             echo "<div class='alert alert-danger'>Error preparing query: " . mysqli_error($link) . "</div>";
-        }
-    }
-}
-
-//close the connection
-mysqli_close($link);
+        }}}
+        
+        //close the connection
+        mysqli_close($link);
 ?>
 
 <!DOCTYPE html>
@@ -133,8 +126,7 @@ mysqli_close($link);
         <option value="">Select a Role</option>
         <?php
         foreach ($tbl_roles as $role) {
-            echo '<option value="' . $role['roleID'] . '">' . htmlspecialchars($role['roleName']) . '</option>';
-        }
+            echo '<option value="' . $role['roleID'] . '">' . htmlspecialchars($role['roleName']) . '</option>';}
         ?>
     </select>
     <span class="invalid-feedback"><?php echo $roleID_err; ?></span>
@@ -145,8 +137,7 @@ mysqli_close($link);
         <option value="">Select a Group</option>
         <?php
         foreach ($tbl_group as $group) {
-            echo '<option value="' . $group['groupID'] . '">' . htmlspecialchars($group['groupName']) . '</option>';
-        }
+            echo '<option value="' . $group['groupID'] . '">' . htmlspecialchars($group['groupName']) . '</option>';}
         ?>
     </select>
     <span class="invalid-feedback"><?php echo $groupID_err; ?></span>

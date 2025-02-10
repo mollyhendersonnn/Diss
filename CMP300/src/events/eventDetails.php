@@ -6,8 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 include_once("../connection.php");
 include_once("../navigation.php"); 
-include_once("../clean.php"); 
-
+ 
 
 //check for the event ID
 if (isset($_GET['eventID'])) {
@@ -23,16 +22,13 @@ if (isset($_GET['eventID'])) {
         if ($event = mysqli_fetch_assoc($result)) {
         } else {
             echo "<p>Event not found.</p>";
-            exit;
-        }
+                    exit; }
     } else {
         echo "<p>Error fetching event details.</p>";
-        exit;
-    }
+        exit;}
 } else {
     echo "<p>No event specified.</p>";
-    exit;
-}
+    exit;}
 
 //RSVP button functionality
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['rsvp'])) {
@@ -47,12 +43,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['rsvp'])) {
                 $_SESSION['rsvp'][$eventID] = true;
             } else {
                 echo '<p class="alert alert-danger">Error updating attendees.</p>';
-            }
-        }
-    } else {
-        echo '<p class="alert alert-danger">You have already RSVP’d for this event!</p>';
-    }
-}
+            }}}else {
+        echo '<p class="alert alert-danger">You have already RSVP’d for this event!</p>';}}
 
 
 //update number of attendees after button pressed
@@ -96,8 +88,6 @@ if ($stmt = mysqli_prepare($link, $query)) {
             <a href="updateEvent.php?eventID=<?php echo $eventID; ?>" class="btn btn-success mt-3">Update Event</a>
             <a href="cancelEvent.php?eventID=<?php echo $eventID; ?>" class="btn btn-danger mt-3">Cancel Event</a>
         <?php endif; ?>
-
-
     </div>
 </body>
 </html>

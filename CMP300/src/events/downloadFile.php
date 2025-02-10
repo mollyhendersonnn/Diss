@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 include_once("../connection.php");
-include_once("../clean.php"); 
+ 
 
 //check for eventID
 if (isset($_GET['eventID'])) {

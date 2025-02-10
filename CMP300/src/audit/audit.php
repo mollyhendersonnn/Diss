@@ -31,9 +31,8 @@ include_once("../navigation.php");
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
         } else {
-            die("Database query preparation failed: " . mysqli_error($link));
-        }
-    }
+            die("Database query preparation failed: " . mysqli_error($link)); }}
+    
 
     // delete entries over 12 months old
     function deleteExpiredAuditEntries($link) {
@@ -44,9 +43,7 @@ include_once("../navigation.php");
             mysqli_stmt_execute($stmt);
             mysqli_stmt_close($stmt);
         } else {
-            echo "Database query preparation failed: " . mysqli_error($link);
-        }
-    }
+            echo "Database query preparation failed: " . mysqli_error($link); }}
     deleteExpiredAuditEntries($link);
     ?>
 
@@ -71,18 +68,14 @@ include_once("../navigation.php");
                         echo "<td>" . htmlspecialchars($row['action']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['timestamp']) . "</td>";
                         echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='3'>No audit records found.</td></tr>";
-                }
+                    }} else {
+                    echo "<tr><td colspan='3'>No audit records found.</td></tr>"; }
                 ?>
             </tbody>
         </table>
     </div>
 </body>
 </html>
-
-
 
 <script>
 
@@ -102,12 +95,7 @@ include_once("../navigation.php");
                 for (let cell of cells) {
                     if (cell.textContent.toLowerCase().indexOf(filter) > -1) {
                         match = true;
-                        break;
-                    }
-                }
-
+                        break; }}
                 row.style.display = match ? '' : 'none';
-            }
-        });
-    });
+            } }); });
 </script>
